@@ -39,13 +39,6 @@ const Header = () => {
           />
         </Carousel.Item>
 
-        <Carousel.Item>
-          <img
-            className="d-block w-100 img-fluid"
-            src="https://www.pcfactory.cl/public/foto/imbatible/5_8984.jpg"
-            alt="Quinta diapositiva"
-          />
-        </Carousel.Item>
       </Carousel>
 
       <div className="custom-welcome-section text-center">
