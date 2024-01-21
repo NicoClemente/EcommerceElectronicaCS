@@ -33,14 +33,14 @@ const HomeButtons = () => {
             <span style={{ marginTop: '10px' }}>Contactanos</span>
           </Button>
         </Col>
-        <Col xs={12} md={4} className="mb-3">
+        {/* <Col xs={12} md={4} className="mb-3">
           <Button as={Link} className='bg-dark' to="/login" variant="primary" style={buttonStyle}>
             <span role="img" aria-label="Log In" style={{ fontSize: '4em' }}>
               🙋
             </span>
             <span style={{ marginTop: '10px' }}>Log In</span>
           </Button>
-        </Col>
+        </Col> */}
       </Row>
     </Container>
   );
