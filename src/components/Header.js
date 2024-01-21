@@ -10,7 +10,7 @@ const Header = () => {
         <Carousel.Item>
           <img
             className="d-block w-100 img-fluid"
-            src="https://www.pcfactory.cl/public/foto/imbatible/6_2817.jpg"
+            src="https://www.tiendainsumosinfo.com.ar/Temp/App_WebSite/App_PictureFiles/Spots/290_slider5.jpg"
             alt="Primera diapositiva"
           />
         </Carousel.Item>
@@ -18,7 +18,7 @@ const Header = () => {
         <Carousel.Item>
           <img
             className="d-block w-100 img-fluid"
-            src="https://www.pcfactory.cl/public/foto/imbatible/1_2909.png"
+            src="https://www.tiendainsumosinfo.com.ar/Temp/App_WebSite/App_PictureFiles/Spots/290_slider1.jpg"
             alt="Segunda diapositiva"
           />
         </Carousel.Item>
@@ -26,7 +26,7 @@ const Header = () => {
         <Carousel.Item>
           <img
             className="d-block w-100 img-fluid"
-            src="https://www.pcfactory.cl/public/foto/imbatible/10_6219.jpg"
+            src="https://www.tiendainsumosinfo.com.ar/Temp/App_WebSite/App_PictureFiles/Spots/290_slider4.jpg"
             alt="Tercedra diapositiva"
           />
         </Carousel.Item>
@@ -34,11 +34,18 @@ const Header = () => {
         <Carousel.Item>
           <img
             className="d-block w-100 img-fluid"
-            src="https://www.pcfactory.cl/public/foto/imbatible/8_5174.jpg"
+            src="https://www.tiendainsumosinfo.com.ar/Temp/App_WebSite/App_PictureFiles/Spots/290_slider2.jpg"
             alt="Cuarta diapositiva"
           />
         </Carousel.Item>
 
+        <Carousel.Item>
+          <img
+            className="d-block w-100 img-fluid"
+            src="https://www.tiendainsumosinfo.com.ar/Temp/App_WebSite/App_PictureFiles/Spots/290_slider3.jpg"
+            alt="Quinta diapositiva"
+          />
+        </Carousel.Item>
       </Carousel>
 
       <div className="custom-welcome-section text-center">
