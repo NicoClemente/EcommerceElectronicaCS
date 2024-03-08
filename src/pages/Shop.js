@@ -1,26 +1,28 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Row, Col, ListGroup } from 'react-bootstrap';
+import { Container, Row, Col, ListGroup, Spinner } from 'react-bootstrap';
 import CardProducto from '../components/CardProducto';
-import { obtenerProductos } from '../services/api'; 
-
+import { obtenerProductos } from '../services/api';
 
 const Shop = ({ agregarAlCarrito }) => {
   const [productos, setProductos] = useState([]);
   const [categorias, setCategorias] = useState([]);
   const [categoriaSeleccionada, setCategoriaSeleccionada] = useState(null);
   const [recargarProductos, setRecargarProductos] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const productosData = await obtenerProductos(); 
+        setLoading(true);
+        const productosData = await obtenerProductos();
         setProductos(productosData);
         obtenerCategorias(productosData);
       } catch (error) {
         console.error('Error al obtener productos:', error);
+      } finally {
+        setLoading(false);
       }
     };
-
     fetchData();
   }, [recargarProductos]);
 
@@ -42,12 +44,13 @@ const Shop = ({ agregarAlCarrito }) => {
     : productos;
 
   return (
-    <Container className='my-3'>
+    <Container className="my-3">
       <Row>
-        <Col md={3} >
+        <Col md={3}>
           {/* Tab lateral con la cantidad de objetos por categoría */}
-          <ListGroup >
-            <ListGroup.Item className='bg-danger border-0 '
+          <ListGroup>
+            <ListGroup.Item
+              className="bg-dark border-0 text-white"
               key="todos"
               active={!categoriaSeleccionada}
               onClick={resetearFiltro}
@@ -68,18 +71,28 @@ const Shop = ({ agregarAlCarrito }) => {
         <Col md={9}>
           {/* Mostrar productos filtrados o todos */}
           <h2>Todos los Productos</h2>
-          <Row>
-            {productosFiltrados.map((producto) => (
-              <Col key={producto._id} md={4} className="mb-4">
-                <CardProducto
-                  key={producto.id}
-                  producto={producto}
-                  agregarAlCarrito={agregarAlCarrito}
-                  recargarProductos={() => setRecargarProductos((prev) => !prev)}
-                />
-              </Col>
-            ))}
-          </Row>
+          {loading ? (
+            // Si está cargando, mostrar el componente de loading
+            <div className="d-flex justify-content-center my-5">
+              <div className="text-center">
+                <Spinner animation="border" variant="primary" className="mb-3" />
+                <h4>Cargando productos...</h4>
+              </div>
+            </div>
+          ) : (
+            <Row>
+              {productosFiltrados.map((producto) => (
+                <Col key={producto._id} md={4} className="mb-4">
+                  <CardProducto
+                    key={producto.id}
+                    producto={producto}
+                    agregarAlCarrito={agregarAlCarrito}
+                    recargarProductos={() => setRecargarProductos((prev) => !prev)}
+                  />
+                </Col>
+              ))}
+            </Row>
+          )}
         </Col>
       </Row>
     </Container>
