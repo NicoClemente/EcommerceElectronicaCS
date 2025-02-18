@@ -9,7 +9,7 @@ const Header = () => {
         <Carousel.Item>
           <img
             className="d-block w-100 img-fluid"
-            src="https://www.tiendainsumosinfo.com.ar/Temp/App_WebSite/App_PictureFiles/Spots/290_slider5.jpg"
+            src="/images/lavarropas.png"
             alt="Primera diapositiva"
           />
         </Carousel.Item>
