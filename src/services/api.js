@@ -1,7 +1,7 @@
  
 import axios from 'axios';
 console.log('process.env.NODE_ENV', process.env.NODE_ENV)
-const baseURL = ' https://apielectronicacs.glitch.me/api/'; 
+const baseURL = 'https://apinodeecommerce.onrender.com'; 
 
 
 const api = axios.create({
