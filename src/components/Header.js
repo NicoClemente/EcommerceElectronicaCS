@@ -17,7 +17,7 @@ const Header = () => {
         <Carousel.Item>
           <img
             className="d-block w-100 img-fluid"
-            src="https://www.tiendainsumosinfo.com.ar/Temp/App_WebSite/App_PictureFiles/Spots/290_slider1.jpg"
+            src="/images/electrodomesticos.png"
             alt="Segunda diapositiva"
           />
         </Carousel.Item>
@@ -25,7 +25,7 @@ const Header = () => {
         <Carousel.Item>
           <img
             className="d-block w-100 img-fluid"
-            src="https://www.tiendainsumosinfo.com.ar/Temp/App_WebSite/App_PictureFiles/Spots/290_slider4.jpg"
+            src="/images/laptop.png"
             alt="Tercedra diapositiva"
           />
         </Carousel.Item>
@@ -33,7 +33,7 @@ const Header = () => {
         <Carousel.Item>
           <img
             className="d-block w-100 img-fluid"
-            src="https://www.tiendainsumosinfo.com.ar/Temp/App_WebSite/App_PictureFiles/Spots/290_slider2.jpg"
+            src="/images/nespresso.png"
             alt="Cuarta diapositiva"
           />
         </Carousel.Item>
@@ -41,7 +41,7 @@ const Header = () => {
         <Carousel.Item>
           <img
             className="d-block w-100 img-fluid"
-            src="https://www.tiendainsumosinfo.com.ar/Temp/App_WebSite/App_PictureFiles/Spots/290_slider3.jpg"
+            src="/images/cuotas.png"
             alt="Quinta diapositiva"
           />
         </Carousel.Item>
