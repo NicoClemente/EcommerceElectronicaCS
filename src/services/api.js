@@ -10,7 +10,6 @@ const api = axios.create({
   withCredentials: false
 });
 
-// Interceptor para el token
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('token');
@@ -24,7 +23,6 @@ api.interceptors.request.use(
   }
 );
 
-// Interceptor para respuestas
 api.interceptors.response.use(
   (response) => response,
   (error) => {
@@ -51,7 +49,6 @@ export const registerUser = async (userData) => {
   }
 };
 
-// src/services/api.js
 export const loginUser = async (credentials) => {
   try {
     const response = await api.post('/auth/login', credentials);
