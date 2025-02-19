@@ -144,12 +144,17 @@ export const obtenerDetallesItem = async (item) => {
 };
 
 // Pago
-export const procesarPago = async (datosPago) => {
+export const procesarPago = async (paymentData) => {
   try {
-    const response = await api.post('/pagos/procesar', datosPago);
+    console.log('Enviando datos de pago:', paymentData);
+    const response = await axios.post('/api/pagos/procesar', paymentData);
     return response.data;
   } catch (error) {
-    console.error('Error al procesar pago:', error);
+    console.error('Error completo en procesarPago:', {
+      response: error.response,
+      message: error.message,
+      config: error.config
+    });
     throw error;
   }
 };
