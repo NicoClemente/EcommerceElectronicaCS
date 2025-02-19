@@ -19,14 +19,30 @@ api.interceptors.request.use((config) => {
 });
 
 // Auth
-export const loginUser = async (credentials) => {
-  const response = await api.post('/auth/login', credentials);
-  return response.data;
+export const registerUser = async (userData) => {
+  try {
+    const response = await api.post('/auth/registro', userData);
+    if (response.data.token) {
+      localStorage.setItem('token', response.data.token);
+    }
+    return response.data;
+  } catch (error) {
+    console.error('Error en registro:', error);
+    throw error.response?.data || error;
+  }
 };
 
-export const registerUser = async (userData) => {
-  const response = await api.post('/auth/registro', userData);
-  return response.data;
+export const loginUser = async (credentials) => {
+  try {
+    const response = await api.post('/auth/login', credentials);
+    if (response.data.token) {
+      localStorage.setItem('token', response.data.token);
+    }
+    return response.data;
+  } catch (error) {
+    console.error('Error en login:', error);
+    throw error.response?.data || error;
+  }
 };
 
 // Carrito
@@ -84,3 +100,4 @@ export const verificarPago = async (transactionId) => {
     throw error;
   }
 };
+

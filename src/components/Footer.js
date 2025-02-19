@@ -1,117 +1,42 @@
-import React, { useState } from "react";
-import { Modal, Button, Form } from "react-bootstrap";
-import { actualizarProducto, eliminarProducto } from "../services/api";
+// src/components/Footer.js
+import React from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faFacebook, faInstagram } from '@fortawesome/free-brands-svg-icons';
 
-const EditModal = ({ producto, showModal, onClose }) => {
-  const [formulario, setFormulario] = useState({
-    titulo: producto.titulo,
-    precio: producto.precio,
-    descripcion: producto.descripcion,
-    marca: producto.marca,
-    imagen: producto.imagen,
-    categoria: producto.categoria,
-  });
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormulario({ ...formulario, [name]: value });
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      await actualizarProducto(producto._id, formulario);
-      onClose();
-    } catch (error) {
-      console.error("Error al actualizar el ítem:", error);
-    }
-  };
-
-  const handleBorrarProducto = async (e) => {
-    e.preventDefault();
-    try {
-      await eliminarProducto(producto._id);
-      console.log("Borrando el item:", producto._id);
-      onClose();
-    } catch (error) {
-      console.error("Error al borrar el ítem:", error);
-    }
-  };
-
+const Footer = () => {
   return (
-    <Modal show={showModal} onHide={onClose}>
-      <Modal.Header closeButton>
-        <Modal.Title>Editar Producto</Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
-        <Form>
-          <Form.Group controlId="titulo">
-            <Form.Label>Título:</Form.Label>
-            <Form.Control
-              type="text"
-              name="titulo"
-              value={formulario.titulo}
-              onChange={handleChange}
-            />
-          </Form.Group>
-          <Form.Group controlId="precio">
-            <Form.Label>Precio:</Form.Label>
-            <Form.Control
-              type="text"
-              name="precio"
-              value={formulario.precio}
-              onChange={handleChange}
-            />
-          </Form.Group>
-          <Form.Group controlId="descripcion">
-            <Form.Label>Descripción:</Form.Label>
-            <Form.Control
-              as="textarea"
-              rows={3}
-              name="descripcion"
-              value={formulario.descripcion}
-              onChange={handleChange}
-            />
-          </Form.Group>
-          <Form.Group controlId="categoria">
-            <Form.Label>Categoria:</Form.Label>
-            <Form.Control
-              type="text"
-              name="categoria"
-              value={formulario.categoria}
-              onChange={handleChange}
-            />
-          </Form.Group>
-          <Form.Group controlId="marca">
-            <Form.Label>Marca:</Form.Label>
-            <Form.Control
-              type="text"
-              name="marca"
-              value={formulario.marca}
-              onChange={handleChange}
-            />
-          </Form.Group>
-          <Form.Group controlId="imagen">
-            <Form.Label>URL de la Imagen:</Form.Label>
-            <Form.Control
-              type="text"
-              name="imagen"
-              value={formulario.imagen}
-              onChange={handleChange}
-            />
-          </Form.Group>
-        </Form>
-      </Modal.Body>
-      <Modal.Footer>
-        <Button variant="danger" onClick={handleBorrarProducto}>
-          Borrar Producto
-        </Button>
-        <Button variant="primary" onClick={handleSubmit}>
-          Guardar Cambios
-        </Button>
-      </Modal.Footer>
-    </Modal>
+    <footer className="bg-dark text-white p-4">
+      <div className="container">
+        <div className="row">
+          <div className="col-md-4 text-md-left text-left">
+            <a href="https://web.facebook.com/nicolas.clemente.92" target="_blank" rel="noopener noreferrer" className="text-white">
+              <FontAwesomeIcon icon={faFacebook} size="3x" className="mb-2" />
+            </a>
+            <br />
+            <a href="https://www.instagram.com/nico.clemente/" target="_blank" rel="noopener noreferrer" className="text-white">
+              <FontAwesomeIcon icon={faInstagram} size="3x" />
+            </a>
+          </div>
+          <div className="col-md-4 mt-md-0 mt-3 text-center fs-2">
+            <div>
+              &copy; {new Date().getFullYear()} ElectrónicaCS
+            </div>
+          </div>
+          <div className="col-md-4 text-md-right text-center">
+            <iframe
+              title="Google Maps"
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d107374.34280008643!2d-62.282906752708!3d-38.7116898269835!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x95bcc8f01545a4e1%3A0xf869cf6c61a041ad!2sBah%C3%ADa%20Blanca%2C%20Buenos%20Aires%2C%20Argentina!5e0!3m2!1sen!2sus!4v1637678836483!5m2!1sen!2sus"
+              width="100%"
+              height="200"
+              style={{ border: '0' }}
+              allowFullScreen=""
+              loading="lazy"
+            ></iframe>
+          </div>
+        </div>
+      </div>
+    </footer>
   );
 };
 
-export default EditModal;
+export default Footer;
