@@ -11,26 +11,28 @@ const PagoMercadoPago = ({ total, items }) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
-
+  
     try {
-      const response = await procesarPago({
+      const paymentData = {
         items,
         total,
         payer: {
           email
         }
-      });
-
-      console.log('Respuesta del pago:', response);
+      };
+  
+      console.log('Iniciando pago con:', JSON.stringify(paymentData, null, 2));
+      
+      const response = await procesarPago(paymentData);
+      console.log('Respuesta de pago:', response);
       
     } catch (error) {
-      setError('Error al procesar el pago. Por favor intente nuevamente.');
-      console.error('Error:', error);
+      console.error('Error en handleSubmit:', error);
+      setError(error.message || 'Error al procesar el pago. Por favor intente nuevamente.');
     } finally {
       setLoading(false);
     }
   };
-
   return (
     <div className="payment-form">
       {error && <Alert variant="danger">{error}</Alert>}

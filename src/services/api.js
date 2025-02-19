@@ -146,15 +146,34 @@ export const obtenerDetallesItem = async (item) => {
 // Pago
 export const procesarPago = async (paymentData) => {
   try {
-    console.log('Enviando datos de pago:', paymentData);
+    console.log('Datos de pago enviados:', JSON.stringify(paymentData, null, 2));
+    
+    if (!paymentData.items || !Array.isArray(paymentData.items)) {
+      throw new Error('Lista de items inválida');
+    }
+    
+    if (!paymentData.total || isNaN(Number(paymentData.total))) {
+      throw new Error('Total de pago inválido');
+    }
+    
+    if (!paymentData.payer || !paymentData.payer.email) {
+      throw new Error('Email del pagador requerido');
+    }
+
     const response = await api.post('/pagos/procesar', paymentData);
     return response.data;
   } catch (error) {
     console.error('Error completo en procesarPago:', {
-      response: error.response,
+      responseData: error.response?.data,
+      responseStatus: error.response?.status,
       message: error.message,
       config: error.config
     });
+    
+    if (error.response?.data) {
+      throw new Error(error.response.data.error || 'Error al procesar pago');
+    }
+    
     throw error;
   }
 };
