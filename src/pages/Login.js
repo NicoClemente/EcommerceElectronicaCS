@@ -16,9 +16,11 @@ const Login = () => {
     e.preventDefault();
     setError('');
     setLoading(true);
-
+  
     try {
+      console.log('Intentando login con:', { email });
       const response = await loginUser({ email, password });
+      console.log('Respuesta del servidor:', response);
       
       if (response.token) {
         localStorage.setItem('token', response.token);
@@ -28,7 +30,7 @@ const Login = () => {
         setError('Respuesta inválida del servidor');
       }
     } catch (error) {
-      console.error('Error en login:', error);
+      console.error('Error completo:', error);
       setError(error.response?.data?.error || 'Error al iniciar sesión');
     } finally {
       setLoading(false);
@@ -50,8 +52,8 @@ const Login = () => {
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            required
             disabled={loading}
+            required
           />
         </Form.Group>
 
@@ -61,8 +63,8 @@ const Login = () => {
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            required
             disabled={loading}
+            required
           />
         </Form.Group>
 
@@ -88,7 +90,6 @@ const Login = () => {
             'Iniciar Sesión'
           )}
         </Button>
-
         <div className="text-center mt-3">
           <p>
             ¿No tienes cuenta? <Link to="/registro">Regístrate aquí</Link>

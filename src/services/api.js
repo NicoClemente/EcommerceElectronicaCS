@@ -7,9 +7,10 @@ const api = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
-  withCredentials: true
+  withCredentials: false
 });
 
+// Interceptor para el token
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('token');
@@ -23,18 +24,18 @@ api.interceptors.request.use(
   }
 );
 
+// Interceptor para respuestas
 api.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
-      // Token expirado o inválido
       localStorage.removeItem('token');
+      localStorage.removeItem('user');
       window.location.href = '/login';
     }
     return Promise.reject(error);
   }
 );
-
 // Auth
 export const registerUser = async (userData) => {
   try {
@@ -50,16 +51,19 @@ export const registerUser = async (userData) => {
   }
 };
 
+// src/services/api.js
 export const loginUser = async (credentials) => {
   try {
     const response = await api.post('/auth/login', credentials);
+    
     if (response.data.token) {
       localStorage.setItem('token', response.data.token);
       localStorage.setItem('user', JSON.stringify(response.data.usuario));
     }
+    
     return response.data;
   } catch (error) {
-    console.error('Error en login:', error);
+    console.error('Error detallado del login:', error.response || error);
     throw error.response?.data || error;
   }
 };
