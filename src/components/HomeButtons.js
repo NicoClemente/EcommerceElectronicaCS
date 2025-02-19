@@ -10,8 +10,8 @@ const HomeButtons = () => {
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
-    color: 'white', 
-    textDecoration: 'none', 
+    color: 'white',
+    textDecoration: 'none',
   };
 
   return (

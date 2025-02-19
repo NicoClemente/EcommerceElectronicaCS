@@ -47,7 +47,6 @@ const Shop = ({ agregarAlCarrito }) => {
     <Container className="my-3">
       <Row>
         <Col md={3}>
-          {/* Tab lateral con la cantidad de objetos por categoría */}
           <ListGroup>
             <ListGroup.Item
               className="bg-dark border-0 text-white"
@@ -69,10 +68,8 @@ const Shop = ({ agregarAlCarrito }) => {
           </ListGroup>
         </Col>
         <Col md={9}>
-          {/* Mostrar productos filtrados o todos */}
           <h2>Todos los Productos</h2>
           {loading ? (
-            // Si está cargando, mostrar el componente de loading
             <div className="d-flex justify-content-center my-5">
               <div className="text-center">
                 <Spinner animation="border" variant="primary" className="mb-3" />
@@ -84,7 +81,6 @@ const Shop = ({ agregarAlCarrito }) => {
               {productosFiltrados.map((producto) => (
                 <Col key={producto._id} md={4} className="mb-4">
                   <CardProducto
-                    key={producto.id}
                     producto={producto}
                     agregarAlCarrito={agregarAlCarrito}
                     recargarProductos={() => setRecargarProductos((prev) => !prev)}

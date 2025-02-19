@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Form, Button, Container, Modal } from 'react-bootstrap';
-import { agregarProducto, obtenerDetallesItem } from '../services/api'; 
+import { agregarProducto, obtenerDetallesItem } from '../services/api';
 
 const Alta = () => {
   const [formulario, setFormulario] = useState({
@@ -19,14 +19,9 @@ const Alta = () => {
     e.preventDefault();
 
     try {
-      // Agregar el producto
       const respuesta = await agregarProducto(formulario);
       setItemAgregado(respuesta);
-
-      // Obtener detalles del ítem recién agregado
       await obtenerDetallesItem(respuesta);
-      
-      // Mostrar el modal
       handleMostrarModal();
     } catch (error) {
       console.error('Error al agregar el ítem:', error);
@@ -45,7 +40,6 @@ const Alta = () => {
   const handleCloseModal = () => {
     setShowModal(false);
   };
-
 
   return (
     <Container className='my-3'>
@@ -112,7 +106,7 @@ const Alta = () => {
           />
         </Form.Group>
 
-        <Button variant="danger border" className='mt-3 w-100' type="submit" onClick={handleMostrarModal}>
+        <Button variant="danger border" className='mt-3 w-100' type="submit">
           Agregar Ítem
         </Button>
       </Form>

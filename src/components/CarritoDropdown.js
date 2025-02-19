@@ -14,7 +14,6 @@ const CarritoDropdown = ({ carrito, eliminarDelCarrito }) => {
   };
 
   const handleVerCarrito = () => {
-     
     toggleDropdown();
   };
 
@@ -33,7 +32,7 @@ const CarritoDropdown = ({ carrito, eliminarDelCarrito }) => {
       >
         {carrito.length > 0 ? (
           carrito.map((producto) => (
-            <div key={producto.id} className="mb-2">
+            <div key={producto._id} className="mb-2">
               <div>
                 <strong>{producto.titulo}</strong>
                 <br />
@@ -50,7 +49,7 @@ const CarritoDropdown = ({ carrito, eliminarDelCarrito }) => {
                   Eliminar
                 </Button>
               </div>
-              <hr /> {/* Línea divisoria entre productos */}
+              <hr />
             </div>
           ))
         ) : (
@@ -58,7 +57,6 @@ const CarritoDropdown = ({ carrito, eliminarDelCarrito }) => {
         )}
 
         <div className="text-center mt-3">
-         
           <Button
             variant="primary"
             as={Link}

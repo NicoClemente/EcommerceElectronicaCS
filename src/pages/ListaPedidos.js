@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Table, Container } from "react-bootstrap";
-import { obtenerCarrito } from "../services/api"; // 
+import { obtenerCarrito } from "../services/api";
 
 const ListaPedidos = () => {
   const [pedidos, setPedidos] = useState([]);

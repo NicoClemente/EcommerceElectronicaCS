@@ -1,3 +1,4 @@
+// src/components/Navigation.js
 import React from "react";
 import { Container, Nav, Navbar } from "react-bootstrap";
 import { Routes, Route, Link } from "react-router-dom";
@@ -9,7 +10,7 @@ import Carrito from "../pages/Carrito";
 import Alta from "../pages/Alta";
 import CarritoDropdown from "./CarritoDropdown";
 import ListaPedidos from "../pages/ListaPedidos";
-
+import ResultadoPago from "../pages/ResultadoPago";
 
 function Navigation() {
   const [carrito, setCarrito] = useState([]);
@@ -18,7 +19,6 @@ function Navigation() {
     const productoEnCarrito = carrito.find((item) => item._id === producto._id);
 
     if (productoEnCarrito) {
-       
       setCarrito(
         carrito.map((item) =>
           item._id === producto._id
@@ -27,18 +27,17 @@ function Navigation() {
         )
       );
     } else {
-       
       setCarrito([...carrito, { ...producto, cantidad: 1 }]);
     }
-
-    console.log(carrito);
   };
+
   const eliminarDelCarrito = (productoId) => {
     const nuevoCarrito = carrito.filter(
       (producto) => producto._id !== productoId
     );
     setCarrito(nuevoCarrito);
   };
+
   return (
     <>
       <Navbar className="bg-dark" variant="light">
@@ -46,7 +45,7 @@ function Navigation() {
           <Navbar.Brand className="text-white fs-1" as={Link} to="/">
             ElectrónicaCS
           </Navbar.Brand>
-          <Nav className="me-auto ">
+          <Nav className="me-auto">
             <Nav.Link className="text-white fs-5" as={Link} to="/shop">
               Shop
             </Nav.Link>
@@ -60,7 +59,6 @@ function Navigation() {
               Pedidos
             </Nav.Link>
           </Nav>
-
           <CarritoDropdown
             carrito={carrito}
             eliminarDelCarrito={eliminarDelCarrito}
@@ -89,6 +87,7 @@ function Navigation() {
           }
         />
         <Route path="/pedidos" element={<ListaPedidos />} />
+        <Route path="/pago/:status" element={<ResultadoPago />} /> {/* Nueva ruta */}
       </Routes>
     </>
   );

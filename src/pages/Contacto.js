@@ -1,10 +1,8 @@
- 
 import React from 'react';
 import { Form, Button, Container } from 'react-bootstrap';
 
 const Contacto = () => {
   const handleEnviarCorreo = () => {
-     
     window.location.href = 'mailto:contacto@tuempresa.com';
   };
 
@@ -13,7 +11,6 @@ const Contacto = () => {
       <h2 className="mb-4">Contacto</h2>
       <p className="mb-4">¡Estamos encantados de escucharte! Por favor, completa el formulario a continuación:</p>
 
-      {/* Formulario de correo electrónico con componentes de React Bootstrap */}
       <Form>
         <Form.Group controlId="nombre">
           <Form.Label>Nombre:</Form.Label>
@@ -30,7 +27,7 @@ const Contacto = () => {
           <Form.Control as="textarea" rows={4} placeholder="Ingresa tu mensaje" required />
         </Form.Group>
 
-        <Button variant="dark border" className='w-100 mt-3 fs-3' type="button"  onClick={handleEnviarCorreo}>
+        <Button variant="dark border" className='w-100 mt-3 fs-3' type="button" onClick={handleEnviarCorreo}>
           Enviar correo
         </Button>
       </Form>

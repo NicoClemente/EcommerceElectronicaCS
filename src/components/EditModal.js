@@ -19,11 +19,9 @@ const EditModal = ({ producto, showModal, onClose }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     try {
       await actualizarProducto(producto._id, formulario);
       onClose();
-      
     } catch (error) {
       console.error("Error al actualizar el ítem:", error);
     }
@@ -35,79 +33,83 @@ const EditModal = ({ producto, showModal, onClose }) => {
       await eliminarProducto(producto._id);
       console.log("Borrando el item:", producto._id);
       onClose();
-      
     } catch (error) {
       console.error("Error al borrar el ítem:", error);
     }
   };
+
   return (
     <Modal show={showModal} onHide={onClose}>
       <Modal.Header closeButton>
         <Modal.Title>Editar Producto</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <Form.Group controlId="titulo">
-          <Form.Label>Título:</Form.Label>
-          <Form.Control
-            type="text"
-            name="titulo"
-            value={formulario.titulo}
-            onChange={handleChange}
-          />
-        </Form.Group>
-        <Form.Group controlId="precio">
-          <Form.Label>Precio:</Form.Label>
-          <Form.Control
-            type="text"
-            name="precio"
-            value={formulario.precio}
-            onChange={handleChange}
-          />
-        </Form.Group>
-        <Form.Group controlId="descripcion">
-          <Form.Label>Descripción:</Form.Label>
-          <Form.Control
-            as="textarea"
-            rows={3}
-            name="descripcion"
-            value={formulario.descripcion}
-            onChange={handleChange}
-          />
-        </Form.Group>
-        <Form.Group controlId="categoria">
-          <Form.Label>Categoria:</Form.Label>
-          <Form.Control
-            type="text"
-            name="categoria"
-            value={formulario.categoria}
-            onChange={handleChange}
-          />
-        </Form.Group>
-        <Form.Group controlId="marca">
-          <Form.Label>Marca:</Form.Label>
-          <Form.Control
-            type="text"
-            name="marca"
-            value={formulario.marca}
-            onChange={handleChange}
-          />
-        </Form.Group>
-        <Form.Group controlId="imagen">
-          <Form.Label>URL de la Imagen:</Form.Label>
-          <Form.Control
-            type="text"
-            name="imagen"
-            value={formulario.imagen}
-            onChange={handleChange}
-          />
-        </Form.Group>{" "}
+        <Form>
+          <Form.Group controlId="titulo">
+            <Form.Label>Título:</Form.Label>
+            <Form.Control
+              type="text"
+              name="titulo"
+              value={formulario.titulo}
+              onChange={handleChange}
+            />
+          </Form.Group>
+          <Form.Group controlId="precio">
+            <Form.Label>Precio:</Form.Label>
+            <Form.Control
+              type="text"
+              name="precio"
+              value={formulario.precio}
+              onChange={handleChange}
+            />
+          </Form.Group>
+          <Form.Group controlId="descripcion">
+            <Form.Label>Descripción:</Form.Label>
+            <Form.Control
+              as="textarea"
+              rows={3}
+              name="descripcion"
+              value={formulario.descripcion}
+              onChange={handleChange}
+            />
+          </Form.Group>
+          <Form.Group controlId="categoria">
+            <Form.Label>Categoria:</Form.Label>
+            <Form.Control
+              type="text"
+              name="categoria"
+              value={formulario.categoria}
+              onChange={handleChange}
+            />
+          </Form.Group>
+          <Form.Group controlId="marca">
+            <Form.Label>Marca:</Form.Label>
+            <Form.Control
+              type="text"
+              name="marca"
+              value={formulario.marca}
+              onChange={handleChange}
+            />
+          </Form.Group>
+          <Form.Group controlId="imagen">
+            <Form.Label>URL de la Imagen:</Form.Label>
+            <Form.Control
+              type="text"
+              name="imagen"
+              value={formulario.imagen}
+              onChange={handleChange}
+            />
+          </Form.Group>
+        </Form>
+      </Modal.Body>
+      <Modal.Footer>
         <Button variant="danger" onClick={handleBorrarProducto}>
           Borrar Producto
-        </Button>{" "}
-        <Button variant="primary" onClick={handleSubmit} type="submit">
+        </Button>
+        <Button variant="primary" onClick={handleSubmit}>
           Guardar Cambios
         </Button>
-      </Modal.Body>
+      </Modal.Footer>
     </Modal>
   );
 };

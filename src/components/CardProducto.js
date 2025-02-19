@@ -1,3 +1,4 @@
+// src/components/CardProducto.js
 import React, { useState } from "react";
 import { Card, Button, Modal } from "react-bootstrap";
 import EditModal from "./EditModal.js";
@@ -23,7 +24,6 @@ const CardProducto = ({ producto, agregarAlCarrito, recargarProductos }) => {
   };
 
   const handleRecargarProductos = () => {
-     
     recargarProductos();
   };
 
@@ -45,10 +45,10 @@ const CardProducto = ({ producto, agregarAlCarrito, recargarProductos }) => {
         </div>
       </Card.Body>
 
-      {/* Botón de edición en la esquina superior izquierda */}
+      {/* Botón de edición */}
       <Button
         variant="link"
-        className="edit-button "
+        className="edit-button"
         style={{
           position: "absolute",
           top: "0",
@@ -61,7 +61,7 @@ const CardProducto = ({ producto, agregarAlCarrito, recargarProductos }) => {
         ✏️
       </Button>
 
-      {/* Modal para los detalles */}
+      {/* Modal de detalles */}
       <Modal show={showDetalleModal} onHide={handleCerrarDetallesModal}>
         <Modal.Header closeButton>
           <Modal.Title>{producto.titulo}</Modal.Title>
@@ -83,7 +83,7 @@ const CardProducto = ({ producto, agregarAlCarrito, recargarProductos }) => {
         </Modal.Footer>
       </Modal>
 
-      {/* Modal para la edición */}
+      {/* Modal de edición */}
       <EditModal
         producto={producto}
         showModal={showEditModal}
