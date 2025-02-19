@@ -146,21 +146,45 @@ export const obtenerDetallesItem = async (item) => {
 // Pago
 export const procesarPago = async (paymentData) => {
   try {
-    console.log('Datos de pago enviados:', JSON.stringify(paymentData, null, 2));
+    console.log('Datos de pago originales:', JSON.stringify(paymentData, null, 2));
     
     if (!paymentData.items || !Array.isArray(paymentData.items)) {
-      throw new Error('Lista de items inválida');
-    }
-    
-    if (!paymentData.total || isNaN(Number(paymentData.total))) {
-      throw new Error('Total de pago inválido');
-    }
-    
-    if (!paymentData.payer || !paymentData.payer.email) {
-      throw new Error('Email del pagador requerido');
+      throw new Error('No se recibieron items para el pago');
     }
 
-    const response = await api.post('/pagos/procesar', paymentData);
+    const itemsWithDetails = await Promise.all(
+      paymentData.items.map(async (item) => {
+        try {
+          const productDetails = await obtenerDetallesItem({ _id: item.productoId });
+          return {
+            _id: item.productoId,
+            titulo: productDetails.titulo,
+            cantidad: item.cantidad,
+            precio: productDetails.precio
+          };
+        } catch (error) {
+          console.error(`Error al obtener detalles del producto ${item.productoId}:`, error);
+          throw new Error(`No se pudieron obtener los detalles del producto ${item.productoId}`);
+        }
+      })
+    );
+
+    const total = Number(paymentData.total);
+    if (isNaN(total) || total <= 0) {
+      throw new Error('Total de pago inválido');
+    }
+
+    const validatedPayload = {
+      items: itemsWithDetails,
+      total: total,
+      payer: {
+        email: paymentData.email || JSON.parse(localStorage.getItem('user'))?.email
+      }
+    };
+
+    console.log('Payload validado:', JSON.stringify(validatedPayload, null, 2));
+
+    const response = await api.post('/pagos/procesar', validatedPayload);
     return response.data;
   } catch (error) {
     console.error('Error completo en procesarPago:', {
