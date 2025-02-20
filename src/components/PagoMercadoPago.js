@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Form, Button, Alert, Row, Col } from 'react-bootstrap';
+import React, { useState, useEffect } from 'react'; 
+import { Form, Button, Alert } from 'react-bootstrap';
 import { procesarPago } from '../services/api';
 
 const PagoMercadoPago = ({ total, carrito, direccionEntrega: direccionInicial, onCompletePayment }) => {
@@ -12,7 +12,6 @@ const PagoMercadoPago = ({ total, carrito, direccionEntrega: direccionInicial, o
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  // Cargar dirección inicial cuando el componente se monte
   useEffect(() => {
     if (direccionInicial) {
       setDireccionEntrega({
