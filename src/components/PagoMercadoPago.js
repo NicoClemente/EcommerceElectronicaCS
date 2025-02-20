@@ -25,9 +25,6 @@ const PagoMercadoPago = ({ total, carrito, direccionEntrega: direccionInicial })
           precio: item.precio
         })),
         total,
-        payer: {
-          email: "test_user_123456789@testuser.com" // Email de comprador de prueba
-        },
         direccionEntrega
       };
   
