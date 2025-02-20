@@ -1,4 +1,3 @@
-// src/pages/ResultadoPago.js
 import React, { useEffect, useState } from 'react';
 import { Container, Alert, Button } from 'react-bootstrap';
 import { Link, useParams } from 'react-router-dom';
@@ -10,23 +9,23 @@ const ResultadoPago = () => {
   const [variant, setVariant] = useState('info');
 
   useEffect(() => {
-    switch (status) {
-      case 'success':
-        setMensaje('¡Pago realizado con éxito!');
-        setVariant('success');
-        break;
-      case 'pending':
-        setMensaje('El pago está pendiente de confirmación');
-        setVariant('warning');
-        break;
-      case 'failure':
-        setMensaje('El pago no pudo ser procesado');
+    const verificarEstadoPago = async () => {
+      try {
+        const resultado = await verificarPago(status);
+        if (resultado.success) {
+          setMensaje('¡Pago verificado con éxito!');
+          setVariant('success');
+        } else {
+          setMensaje('Hubo un problema al verificar el pago.');
+          setVariant('danger');
+        }
+      } catch (error) {
+        setMensaje('Error al verificar el pago.');
         setVariant('danger');
-        break;
-      default:
-        setMensaje('Estado de pago desconocido');
-        setVariant('info');
-    }
+      }
+    };
+
+    verificarEstadoPago();
   }, [status]);
 
   return (

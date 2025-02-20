@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'; 
-import { Form, Button, Alert } from 'react-bootstrap';
+import { Form, Button, Alert, Row, Col } from 'react-bootstrap'; 
 import { procesarPago } from '../services/api';
 
 const PagoMercadoPago = ({ total, carrito, direccionEntrega: direccionInicial, onCompletePayment }) => {
