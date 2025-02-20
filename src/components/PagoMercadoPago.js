@@ -3,7 +3,6 @@ import { Form, Button, Alert, Row, Col } from 'react-bootstrap';
 import { procesarPago } from '../services/api';
 
 const PagoMercadoPago = ({ total, carrito, direccionEntrega: direccionInicial }) => {
-  const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [direccionEntrega] = useState({
@@ -18,10 +17,6 @@ const PagoMercadoPago = ({ total, carrito, direccionEntrega: direccionInicial })
     setError(null);
 
     try {
-      if (!email || !email.includes('@')) {
-        throw new Error('Email inválido');
-      }
-
       const paymentData = {
         items: carrito.map(item => ({
           _id: item._id,
@@ -30,7 +25,6 @@ const PagoMercadoPago = ({ total, carrito, direccionEntrega: direccionInicial })
           precio: item.precio
         })),
         total,
-        payer: { email },
         direccionEntrega
       };
 
@@ -54,18 +48,7 @@ const PagoMercadoPago = ({ total, carrito, direccionEntrega: direccionInicial })
     <Form onSubmit={handleSubmit}>
       {error && <Alert variant="danger">{error}</Alert>}
       
-      <Form.Group className="mb-3">
-        <Form.Label>Email</Form.Label>
-        <Form.Control
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-          disabled={loading}
-          placeholder="Ingresa tu email"
-        />
-      </Form.Group>
-
+      {/* Campos de dirección deshabilitados */}
       <Row>
         <Col md={6}>
           <Form.Group className="mb-3">
