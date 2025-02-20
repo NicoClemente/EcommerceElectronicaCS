@@ -1,13 +1,13 @@
 import axios from 'axios';
 
-const baseURL = 'https://apinodeecommerce.onrender.com/api/';
+const baseURL = process.env.REACT_APP_API_URL || 'https://apinodeecommerce.onrender.com/api/';
 
 const api = axios.create({
   baseURL,
   headers: {
     'Content-Type': 'application/json',
   },
-  withCredentials: false
+  withCredentials: false 
 });
 
 api.interceptors.request.use(
@@ -148,37 +148,60 @@ export const procesarPago = async (paymentData) => {
   try {
     console.log('Datos de pago originales:', JSON.stringify(paymentData, null, 2));
     
-    if (!paymentData.items || !Array.isArray(paymentData.items)) {
+    // Validate items
+    const items = paymentData.items;
+    if (!items || !Array.isArray(items) || items.length === 0) {
       throw new Error('No se recibieron items para el pago');
     }
 
+    // Validate payer email
+    if (!paymentData.payer?.email) {
+      throw new Error('Se requiere un email de Mercado Pago');
+    }
+
+    // Validate delivery address
+    const direccionEntrega = paymentData.direccionEntrega;
+    if (!direccionEntrega || !direccionEntrega.calle || !direccionEntrega.ciudad || !direccionEntrega.codigoPostal) {
+      console.error('Dirección de entrega inválida:', direccionEntrega);
+      throw new Error('Dirección de entrega incompleta');
+    }
+
+    // Fetch product details for each item
     const itemsWithDetails = await Promise.all(
-      paymentData.items.map(async (item) => {
+      items.map(async (item) => {
         try {
-          const productDetails = await obtenerDetallesItem({ _id: item.productoId });
+          // Fetch product details using the productoId
+          const productDetails = await obtenerDetallesItem({ _id: item._id || item.productoId });
           return {
-            _id: item.productoId,
+            _id: item._id || item.productoId,
             titulo: productDetails.titulo,
             cantidad: item.cantidad,
             precio: productDetails.precio
           };
         } catch (error) {
-          console.error(`Error al obtener detalles del producto ${item.productoId}:`, error);
-          throw new Error(`No se pudieron obtener los detalles del producto ${item.productoId}`);
+          console.error(`Error al obtener detalles del producto ${item._id || item.productoId}:`, error);
+          throw new Error(`No se pudieron obtener los detalles del producto ${item._id || item.productoId}`);
         }
       })
     );
 
+    // Validate total
     const total = Number(paymentData.total);
     if (isNaN(total) || total <= 0) {
       throw new Error('Total de pago inválido');
     }
 
+    // Validate payload for Mercado Pago
     const validatedPayload = {
       items: itemsWithDetails,
       total: total,
       payer: {
-        email: paymentData.email || JSON.parse(localStorage.getItem('user'))?.email
+        email: paymentData.payer.email
+      },
+      direccionEntrega: {
+        calle: direccionEntrega.calle,
+        ciudad: direccionEntrega.ciudad,
+        codigoPostal: direccionEntrega.codigoPostal
       }
     };
 
@@ -194,6 +217,7 @@ export const procesarPago = async (paymentData) => {
       config: error.config
     });
     
+    // Throw a more informative error
     if (error.response?.data) {
       throw new Error(error.response.data.error || 'Error al procesar pago');
     }
