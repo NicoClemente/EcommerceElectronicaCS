@@ -1,16 +1,32 @@
-import React, { useState, useEffect } from 'react'; 
-import { Form, Button, Alert, Row, Col } from 'react-bootstrap'; 
+import React, { useState, useEffect } from 'react';
+import { Form, Button, Alert, Row, Col } from 'react-bootstrap';
 import { procesarPago } from '../services/api';
 
 const PagoMercadoPago = ({ total, carrito, direccionEntrega: direccionInicial, onCompletePayment }) => {
   const [email, setEmail] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
   const [direccionEntrega, setDireccionEntrega] = useState({
     calle: '',
     ciudad: '',
     codigoPostal: ''
   });
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    // Cargar script de MercadoPago
+    const script = document.createElement('script');
+    script.src = 'https://sdk.mercadopago.com/js/v2';
+    script.type = 'text/javascript';
+    document.body.appendChild(script);
+
+    script.onload = () => {
+      const mp = new window.MercadoPago(process.env.REACT_APP_MERCADOPAGO_PUBLIC_KEY);
+    };
+
+    return () => {
+      document.body.removeChild(script);
+    };
+  }, []);
 
   useEffect(() => {
     if (direccionInicial) {
@@ -22,7 +38,6 @@ const PagoMercadoPago = ({ total, carrito, direccionEntrega: direccionInicial, o
     }
   }, [direccionInicial]);
 
-  // Manejar cambios en los campos de dirección
   const handleDireccionChange = (e) => {
     const { name, value } = e.target;
     setDireccionEntrega(prev => ({
@@ -37,17 +52,16 @@ const PagoMercadoPago = ({ total, carrito, direccionEntrega: direccionInicial, o
     setError(null);
 
     try {
-      // Validar email
+      // Validaciones
       if (!email || !email.includes('@')) {
-        throw new Error('Por favor, ingrese un email válido para Mercado Pago');
+        throw new Error('Por favor, ingrese un email válido');
       }
 
-      // Validar dirección de entrega
       if (!direccionEntrega.calle || !direccionEntrega.ciudad || !direccionEntrega.codigoPostal) {
         throw new Error('Por favor complete todos los campos de la dirección de entrega');
       }
 
-      // Preparar payload de pago
+      // Preparar payload
       const paymentPayload = {
         items: carrito.map(item => ({
           _id: item._id,
@@ -62,17 +76,23 @@ const PagoMercadoPago = ({ total, carrito, direccionEntrega: direccionInicial, o
         direccionEntrega: direccionEntrega
       };
 
-      console.log('Payload de pago:', JSON.stringify(paymentPayload, null, 2));
-      
+      console.log('Iniciando proceso de pago:', paymentPayload);
       const response = await procesarPago(paymentPayload);
-      console.log('Respuesta de pago:', response);
-      
-      // Llamar al manejador de pago completado si está definido
+      console.log('Respuesta del servidor:', response);
+
+      // Redirigir al checkout de MercadoPago
+      if (response.init_point) {
+        window.location.href = response.init_point;
+      } else {
+        throw new Error('No se recibió la URL de pago de MercadoPago');
+      }
+
+      // Llamar al callback si existe
       if (onCompletePayment) {
         onCompletePayment();
       }
     } catch (error) {
-      console.error('Error en handleSubmit:', error);
+      console.error('Error en el proceso de pago:', error);
       setError(error.message || 'Error al procesar el pago. Por favor intente nuevamente.');
     } finally {
       setLoading(false);
@@ -81,15 +101,19 @@ const PagoMercadoPago = ({ total, carrito, direccionEntrega: direccionInicial, o
 
   return (
     <div className="payment-form">
-      {error && <Alert variant="danger">{error}</Alert>}
+      {error && (
+        <Alert variant="danger" className="mb-4">
+          {error}
+        </Alert>
+      )}
       
       <Form onSubmit={handleSubmit}>
-        {/* Sección de Email */}
-        <Form.Group className="mb-3">
+        {/* Email */}
+        <Form.Group className="mb-4">
           <Form.Label>Email de Mercado Pago</Form.Label>
           <Form.Control
             type="email"
-            placeholder="Ingrese el email para Mercado Pago"
+            placeholder="Ingrese su email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
@@ -100,8 +124,11 @@ const PagoMercadoPago = ({ total, carrito, direccionEntrega: direccionInicial, o
           </Form.Text>
         </Form.Group>
 
-        {/* Sección de Dirección de Entrega */}
-        <Row>
+        {/* Dirección de Entrega */}
+        <Row className="mb-4">
+          <Col md={12}>
+            <h5 className="mb-3">Dirección de Entrega</h5>
+          </Col>
           <Col md={6}>
             <Form.Group className="mb-3">
               <Form.Label>Calle</Form.Label>
@@ -132,7 +159,7 @@ const PagoMercadoPago = ({ total, carrito, direccionEntrega: direccionInicial, o
           </Col>
         </Row>
         
-        <Form.Group className="mb-3">
+        <Form.Group className="mb-4">
           <Form.Label>Código Postal</Form.Label>
           <Form.Control
             type="text"
@@ -144,6 +171,15 @@ const PagoMercadoPago = ({ total, carrito, direccionEntrega: direccionInicial, o
             disabled={loading}
           />
         </Form.Group>
+
+        {/* Resumen del Pago */}
+        <div className="payment-summary mb-4">
+          <h5 className="mb-3">Resumen del Pago</h5>
+          <p className="mb-2">Total a pagar: ${total}</p>
+          <small className="text-muted">
+            Serás redirigido a Mercado Pago para completar la compra
+          </small>
+        </div>
 
         {/* Botón de Pago */}
         <Button 
