@@ -6,19 +6,11 @@ const PagoMercadoPago = ({ total, carrito, direccionEntrega: direccionInicial })
   const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [direccionEntrega, setDireccionEntrega] = useState({
+  const [direccionEntrega] = useState({
     calle: direccionInicial?.calle || '',
     ciudad: direccionInicial?.ciudad || '',
     codigoPostal: direccionInicial?.codigoPostal || ''
   });
-
-  const handleDireccionChange = (e) => {
-    const { name, value } = e.target;
-    setDireccionEntrega(prev => ({
-      ...prev,
-      [name]: value
-    }));
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -28,10 +20,6 @@ const PagoMercadoPago = ({ total, carrito, direccionEntrega: direccionInicial })
     try {
       if (!email || !email.includes('@')) {
         throw new Error('Email inválido');
-      }
-
-      if (!direccionEntrega.calle || !direccionEntrega.ciudad || !direccionEntrega.codigoPostal) {
-        throw new Error('Complete la dirección de entrega');
       }
 
       const paymentData = {
@@ -74,6 +62,7 @@ const PagoMercadoPago = ({ total, carrito, direccionEntrega: direccionInicial })
           onChange={(e) => setEmail(e.target.value)}
           required
           disabled={loading}
+          placeholder="Ingresa tu email"
         />
       </Form.Group>
 
@@ -82,11 +71,8 @@ const PagoMercadoPago = ({ total, carrito, direccionEntrega: direccionInicial })
           <Form.Group className="mb-3">
             <Form.Label>Calle</Form.Label>
             <Form.Control
-              name="calle"
               value={direccionEntrega.calle}
-              onChange={handleDireccionChange}
-              required
-              disabled={loading}
+              disabled
             />
           </Form.Group>
         </Col>
@@ -94,11 +80,8 @@ const PagoMercadoPago = ({ total, carrito, direccionEntrega: direccionInicial })
           <Form.Group className="mb-3">
             <Form.Label>Ciudad</Form.Label>
             <Form.Control
-              name="ciudad"
               value={direccionEntrega.ciudad}
-              onChange={handleDireccionChange}
-              required
-              disabled={loading}
+              disabled
             />
           </Form.Group>
         </Col>
@@ -107,11 +90,8 @@ const PagoMercadoPago = ({ total, carrito, direccionEntrega: direccionInicial })
       <Form.Group className="mb-3">
         <Form.Label>Código Postal</Form.Label>
         <Form.Control
-          name="codigoPostal"
           value={direccionEntrega.codigoPostal}
-          onChange={handleDireccionChange}
-          required
-          disabled={loading}
+          disabled
         />
       </Form.Group>
 
