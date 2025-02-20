@@ -7,7 +7,7 @@ const api = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
-  withCredentials: false 
+  withCredentials: true
 });
 
 api.interceptors.request.use(
@@ -18,9 +18,7 @@ api.interceptors.request.use(
     }
     return config;
   },
-  (error) => {
-    return Promise.reject(error);
-  }
+  (error) => Promise.reject(error)
 );
 
 api.interceptors.response.use(
@@ -34,6 +32,7 @@ api.interceptors.response.use(
     return Promise.reject(error);
   }
 );
+
 // Auth
 export const registerUser = async (userData) => {
   try {
@@ -52,12 +51,12 @@ export const registerUser = async (userData) => {
 export const loginUser = async (credentials) => {
   try {
     const response = await api.post('/auth/login', credentials);
-    
+
     if (response.data.token) {
       localStorage.setItem('token', response.data.token);
       localStorage.setItem('user', JSON.stringify(response.data.usuario));
     }
-    
+
     return response.data;
   } catch (error) {
     console.error('Error detallado del login:', error.response || error);
@@ -147,7 +146,7 @@ export const obtenerDetallesItem = async (item) => {
 export const procesarPago = async (paymentData) => {
   try {
     console.log('Datos de pago originales:', JSON.stringify(paymentData, null, 2));
-    
+
     // Validate items
     const items = paymentData.items;
     if (!items || !Array.isArray(items) || items.length === 0) {
@@ -216,12 +215,12 @@ export const procesarPago = async (paymentData) => {
       message: error.message,
       config: error.config
     });
-    
+
     // Throw a more informative error
     if (error.response?.data) {
       throw new Error(error.response.data.error || 'Error al procesar pago');
     }
-    
+
     throw error;
   }
 };
