@@ -15,7 +15,7 @@ const PagoMercadoPago = ({ total, carrito, direccionEntrega: direccionInicial })
     e.preventDefault();
     setLoading(true);
     setError(null);
-
+  
     try {
       const paymentData = {
         items: carrito.map(item => ({
@@ -25,9 +25,12 @@ const PagoMercadoPago = ({ total, carrito, direccionEntrega: direccionInicial })
           precio: item.precio
         })),
         total,
+        payer: {
+          email: "test_user_123456789@testuser.com" // Email de comprador de prueba
+        },
         direccionEntrega
       };
-
+  
       const response = await procesarPago(paymentData);
       
       if (response.init_point) {
@@ -35,7 +38,7 @@ const PagoMercadoPago = ({ total, carrito, direccionEntrega: direccionInicial })
       } else {
         throw new Error('No se recibió la URL de pago');
       }
-
+  
     } catch (error) {
       setError(error.message);
       console.error('Error:', error);
