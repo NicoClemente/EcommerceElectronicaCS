@@ -10,16 +10,17 @@ const PagoMercadoPago = ({ total, carrito }) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
-
+  
     try {
       const paymentData = {
         items: carrito.map(item => ({
-          titulo: item.titulo,
-          cantidad: item.cantidad,
-          precio: item.precio
+          title: item.titulo,
+          quantity: Number(item.cantidad), 
+          unit_price: Number(item.precio), 
+          currency_id: "ARS"
         }))
       };
-
+  
       const response = await procesarPago(paymentData);
       
       if (response.init_point) {
@@ -27,7 +28,7 @@ const PagoMercadoPago = ({ total, carrito }) => {
       } else {
         throw new Error('No se recibió la URL de pago');
       }
-
+  
     } catch (error) {
       setError(error.message);
       console.error('Error:', error);
