@@ -145,51 +145,27 @@ export const obtenerDetallesItem = async (item) => {
 // Pago
 export const procesarPago = async (paymentData) => {
   try {
-    console.log('Datos de pago originales:', JSON.stringify(paymentData, null, 2));
+    const { items, direccionEntrega } = paymentData;
 
-    const items = paymentData.items;
-    if (!items || !Array.isArray(items) || items.length === 0) {
+    if (!items?.length) {
       throw new Error('No se recibieron items para el pago');
     }
 
-    const direccionEntrega = paymentData.direccionEntrega;
-    if (!direccionEntrega || !direccionEntrega.calle || !direccionEntrega.ciudad || !direccionEntrega.codigoPostal) {
-      console.error('Dirección de entrega inválida:', direccionEntrega);
-      throw new Error('Dirección de entrega incompleta');
-    }
-
-    const total = Number(paymentData.total);
-    if (isNaN(total) || total <= 0) {
-      throw new Error('Total de pago inválido');
-    }
-
     const validatedPayload = {
-      items: items,
-      total: total,
-      direccionEntrega: {
-        calle: direccionEntrega.calle,
-        ciudad: direccionEntrega.ciudad,
-        codigoPostal: direccionEntrega.codigoPostal
-      }
+      items: items.map(item => ({
+        id: item._id,
+        title: item.titulo,
+        quantity: item.cantidad,
+        unit_price: Number(item.precio)
+      })),
+      direccionEntrega
     };
-
-    console.log('Payload validado:', JSON.stringify(validatedPayload, null, 2));
 
     const response = await api.post('/pagos/procesar', validatedPayload);
     return response.data;
   } catch (error) {
-    console.error('Error completo en procesarPago:', {
-      responseData: error.response?.data,
-      responseStatus: error.response?.status,
-      message: error.message,
-      config: error.config
-    });
-
-    if (error.response?.data) {
-      throw new Error(error.response.data.error || 'Error al procesar pago');
-    }
-
-    throw error;
+    console.error('Error en procesarPago:', error);
+    throw new Error(error.response?.data?.error || 'Error al procesar el pago');
   }
 };
 
