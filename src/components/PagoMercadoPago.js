@@ -15,7 +15,7 @@ const PagoMercadoPago = ({ total, carrito, direccionEntrega: direccionInicial })
     e.preventDefault();
     setLoading(true);
     setError(null);
-  
+
     try {
       const paymentData = {
         items: carrito.map(item => ({
@@ -27,15 +27,15 @@ const PagoMercadoPago = ({ total, carrito, direccionEntrega: direccionInicial })
         total,
         direccionEntrega
       };
-  
+
       const response = await procesarPago(paymentData);
       
       if (response.init_point) {
-        window.location.href = response.init_point;
+        window.location.href = response.sandbox_init_point || response.init_point;
       } else {
         throw new Error('No se recibió la URL de pago');
       }
-  
+
     } catch (error) {
       setError(error.message);
       console.error('Error:', error);
@@ -48,7 +48,6 @@ const PagoMercadoPago = ({ total, carrito, direccionEntrega: direccionInicial })
     <Form onSubmit={handleSubmit}>
       {error && <Alert variant="danger">{error}</Alert>}
       
-      {/* Campos de dirección deshabilitados */}
       <Row>
         <Col md={6}>
           <Form.Group className="mb-3">
