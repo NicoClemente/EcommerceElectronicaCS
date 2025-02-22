@@ -40,7 +40,7 @@ const PagoMercadoPago = ({ total, carrito }) => {
   };
 
   return (
-    <Form onSubmit={handleSubmit}>
+    <Form onSubmit={handleSubmit} className="mt-3">
       {error && <Alert variant="danger">{error}</Alert>}
       
       <Button 
@@ -49,7 +49,7 @@ const PagoMercadoPago = ({ total, carrito }) => {
         className="w-100"
         style={{ backgroundColor: '#009ee3', borderColor: '#009ee3' }}
       >
-        {loading ? 'Procesando...' : `Pagar $${total}`}
+        {loading ? 'Procesando...' : `Pagar con Mercado Pago $${total}`}
       </Button>
     </Form>
   );
