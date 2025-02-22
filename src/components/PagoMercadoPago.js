@@ -14,12 +14,11 @@ const PagoMercadoPago = ({ total, carrito }) => {
     try {
       const paymentData = {
         items: carrito.map(item => ({
-          titulo: item.titulo,
-          cantidad: Number(item.cantidad),
-          precio: Number(item.precio)
-        })),
-        total: Number(total),
-        direccionEntrega
+          title: item.titulo,
+          unit_price: Number(item.precio),
+          quantity: Number(item.cantidad),
+          currency_id: "ARS"
+        }))
       };
   
       console.log('Enviando datos:', paymentData);
