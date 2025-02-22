@@ -145,10 +145,11 @@ export const obtenerDetallesItem = async (item) => {
 // Pago
 export const procesarPago = async (paymentData) => {
   try {
+    console.log('Enviando a API:', paymentData);
     const response = await api.post('/pagos/procesar', paymentData);
     return response.data;
   } catch (error) {
-    console.error('Error en procesarPago:', error);
+    console.error('Error detallado:', error.response?.data || error);
     throw new Error(error.response?.data?.error || 'Error al procesar el pago');
   }
 };

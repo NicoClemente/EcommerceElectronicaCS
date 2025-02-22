@@ -14,12 +14,15 @@ const PagoMercadoPago = ({ total, carrito }) => {
     try {
       const paymentData = {
         items: carrito.map(item => ({
-          title: item.titulo,
-          quantity: Number(item.cantidad), 
-          unit_price: Number(item.precio), 
-          currency_id: "ARS"
-        }))
+          titulo: item.titulo,
+          cantidad: Number(item.cantidad),
+          precio: Number(item.precio)
+        })),
+        total: Number(total),
+        direccionEntrega
       };
+  
+      console.log('Enviando datos:', paymentData);
   
       const response = await procesarPago(paymentData);
       
@@ -30,8 +33,8 @@ const PagoMercadoPago = ({ total, carrito }) => {
       }
   
     } catch (error) {
-      setError(error.message);
-      console.error('Error:', error);
+      console.error('Error completo:', error);
+      setError(error.message || 'Error al procesar el pago');
     } finally {
       setLoading(false);
     }
