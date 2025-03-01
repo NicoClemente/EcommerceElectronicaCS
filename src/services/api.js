@@ -83,7 +83,14 @@ export const obtenerCarrito = async () => {
 
 export const agregarAlCarrito = async (datosPedido) => {
   try {
-    const response = await api.post('/carrito', datosPedido);
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    
+    const pedidoConUsuario = {
+      ...datosPedido,
+      usuario: user._id 
+    };
+    
+    const response = await api.post('/carrito', pedidoConUsuario);
     return response.data;
   } catch (error) {
     console.error('Error al agregar al carrito:', error);

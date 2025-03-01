@@ -1,40 +1,182 @@
-// src/components/Footer.js
 import React from 'react';
+import { Container, Row, Col, Button, Form, InputGroup } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFacebook, faInstagram } from '@fortawesome/free-brands-svg-icons';
+import { 
+  faFacebook, faInstagram, faTwitter, faYoutube 
+} from '@fortawesome/free-brands-svg-icons';
+import { faEnvelope, faPhone, faMapMarkerAlt, faCreditCard } from '@fortawesome/free-solid-svg-icons';
+import { Link } from 'react-router-dom';
 
 const Footer = () => {
+  const currentYear = new Date().getFullYear();
+
   return (
-    <footer className="bg-dark text-white p-4">
-      <div className="container">
-        <div className="row">
-          <div className="col-md-4 text-md-left text-left">
-            <a href="https://web.facebook.com/nicolas.clemente.92" target="_blank" rel="noopener noreferrer" className="text-white">
-              <FontAwesomeIcon icon={faFacebook} size="3x" className="mb-2" />
-            </a>
-            <br />
-            <a href="https://www.instagram.com/nico.clemente/" target="_blank" rel="noopener noreferrer" className="text-white">
-              <FontAwesomeIcon icon={faInstagram} size="3x" />
-            </a>
-          </div>
-          <div className="col-md-4 mt-md-0 mt-3 text-center fs-2">
-            <div>
-              &copy; {new Date().getFullYear()} ElectrónicaCS
+    <footer className="bg-dark text-white py-5 mt-5">
+      <Container>
+        <Row className="mb-5">
+          <Col lg={4} md={6} className="mb-4 mb-md-0">
+            <h5 className="text-uppercase mb-4 pb-1 border-bottom border-primary border-2 d-inline-block">
+              ElectrónicaCS
+            </h5>
+            <p className="mb-4">
+              Tu tienda de confianza para los mejores productos electrónicos.
+              Ofrecemos calidad, servicio y los mejores precios del mercado.
+            </p>
+            <div className="mb-4">
+              <div className="d-flex align-items-center mb-3">
+                <FontAwesomeIcon icon={faMapMarkerAlt} className="me-3 text-primary" />
+                <p className="mb-0">Bahía Blanca, Buenos Aires, Argentina</p>
+              </div>
+              <div className="d-flex align-items-center mb-3">
+                <FontAwesomeIcon icon={faPhone} className="me-3 text-primary" />
+                <p className="mb-0">+54 291 123-4567</p>
+              </div>
+              <div className="d-flex align-items-center mb-3">
+                <FontAwesomeIcon icon={faEnvelope} className="me-3 text-primary" />
+                <p className="mb-0">info@electronicacs.com</p>
+              </div>
             </div>
-          </div>
-          <div className="col-md-4 text-md-right text-center">
-            <iframe
-              title="Google Maps"
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d107374.34280008643!2d-62.282906752708!3d-38.7116898269835!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x95bcc8f01545a4e1%3A0xf869cf6c61a041ad!2sBah%C3%ADa%20Blanca%2C%20Buenos%20Aires%2C%20Argentina!5e0!3m2!1sen!2sus!4v1637678836483!5m2!1sen!2sus"
-              width="100%"
-              height="200"
-              style={{ border: '0' }}
-              allowFullScreen=""
-              loading="lazy"
-            ></iframe>
-          </div>
-        </div>
-      </div>
+          </Col>
+
+          <Col lg={2} md={6} className="mb-4 mb-md-0">
+            <h5 className="text-uppercase mb-4 pb-1 border-bottom border-primary border-2 d-inline-block">Enlaces</h5>
+            <ul className="list-unstyled mb-0">
+              <li className="mb-2">
+                <Link to="/" className="text-white text-decoration-none hover-effect">
+                  Inicio
+                </Link>
+              </li>
+              <li className="mb-2">
+                <Link to="/shop" className="text-white text-decoration-none hover-effect">
+                  Tienda
+                </Link>
+              </li>
+              <li className="mb-2">
+                <Link to="/contacto" className="text-white text-decoration-none hover-effect">
+                  Contacto
+                </Link>
+              </li>
+              <li className="mb-2">
+                <Link to="/pedidos" className="text-white text-decoration-none hover-effect">
+                  Mis Pedidos
+                </Link>
+              </li>
+            </ul>
+          </Col>
+
+          <Col lg={2} md={6} className="mb-4 mb-md-0">
+            <h5 className="text-uppercase mb-4 pb-1 border-bottom border-primary border-2 d-inline-block">Categorías</h5>
+            <ul className="list-unstyled">
+              <li className="mb-2">
+                <Link to="/shop" className="text-white text-decoration-none hover-effect">
+                  Smartphones
+                </Link>
+              </li>
+              <li className="mb-2">
+                <Link to="/shop" className="text-white text-decoration-none hover-effect">
+                  Computadoras
+                </Link>
+              </li>
+              <li className="mb-2">
+                <Link to="/shop" className="text-white text-decoration-none hover-effect">
+                  Televisores
+                </Link>
+              </li>
+              <li className="mb-2">
+                <Link to="/shop" className="text-white text-decoration-none hover-effect">
+                  Electrodomésticos
+                </Link>
+              </li>
+            </ul>
+          </Col>
+
+          <Col lg={4} md={6} className="mb-4 mb-md-0">
+            <h5 className="text-uppercase mb-4 pb-1 border-bottom border-primary border-2 d-inline-block">Newsletter</h5>
+            <p>Suscríbete para recibir nuestras ofertas y novedades</p>
+            
+            <Form className="mb-4">
+              <InputGroup>
+                <Form.Control
+                  placeholder="Ingresa tu email"
+                  aria-label="Email para newsletter"
+                />
+                <Button variant="primary" type="submit">
+                  Suscribirse
+                </Button>
+              </InputGroup>
+            </Form>
+
+            <h5 className="text-uppercase mb-3">Síguenos</h5>
+            <div className="d-flex">
+              <a href="https://web.facebook.com/nicolas.clemente.92" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="btn btn-outline-light btn-floating me-2"
+              >
+                <FontAwesomeIcon icon={faFacebook} />
+              </a>
+              <a href="https://www.instagram.com/nico.clemente/" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="btn btn-outline-light btn-floating me-2"
+              >
+                <FontAwesomeIcon icon={faInstagram} />
+              </a>
+              <a href="#" 
+                className="btn btn-outline-light btn-floating me-2"
+              >
+                <FontAwesomeIcon icon={faTwitter} />
+              </a>
+              <a href="#" 
+                className="btn btn-outline-light btn-floating"
+              >
+                <FontAwesomeIcon icon={faYoutube} />
+              </a>
+            </div>
+          </Col>
+        </Row>
+
+        <hr className="my-4" />
+
+        <Row className="align-items-center">
+          <Col md={8} className="mb-3 mb-md-0">
+            <p className="mb-0">
+              &copy; {currentYear} ElectrónicaCS. Todos los derechos reservados.
+            </p>
+          </Col>
+          <Col md={4} className="text-md-end">
+            <div className="payment-methods">
+              <FontAwesomeIcon icon={faCreditCard} className="me-2 text-light" />
+              <img src="/images/visa.png" alt="Visa" className="payment-icon" style={{ height: "24px", marginRight: "8px" }} />
+              <img src="/images/mastercard.png" alt="Mastercard" className="payment-icon" style={{ height: "24px", marginRight: "8px" }} />
+              <img src="/images/mercadopago.png" alt="MercadoPago" className="payment-icon" style={{ height: "24px" }} />
+            </div>
+          </Col>
+        </Row>
+      </Container>
+      
+      {/* Estilos CSS para los efectos de hover */}
+      <style jsx="true">{`
+        .hover-effect {
+          transition: color 0.3s ease;
+        }
+        .hover-effect:hover {
+          color: #0d6efd !important;
+        }
+        .btn-floating {
+          border-radius: 50%;
+          width: 36px;
+          height: 36px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          transition: all 0.3s ease;
+        }
+        .btn-floating:hover {
+          transform: translateY(-3px);
+          box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+      `}</style>
     </footer>
   );
 };
