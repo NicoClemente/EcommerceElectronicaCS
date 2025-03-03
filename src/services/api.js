@@ -175,3 +175,28 @@ export const getAuthHeaders = () => {
   const token = localStorage.getItem('token');
   return token ? { Authorization: `Bearer ${token}` } : {};
 };
+
+export const subirImagen = async (file) => {
+  const formData = new FormData();
+  formData.append('image', file);
+  
+  try {
+    const response = await fetch(`${process.env.REACT_APP_API_URL}/upload/image`, {
+      method: 'POST',
+      body: formData,
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem('token')}`
+      }
+    });
+    
+    if (!response.ok) {
+      throw new Error('Error al cargar la imagen');
+    }
+    
+    const data = await response.json();
+    return data.imageUrl; // URL de la imagen subida
+  } catch (error) {
+    console.error('Error:', error);
+    throw error;
+  }
+};

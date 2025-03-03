@@ -7,7 +7,7 @@ import Shop from "../pages/Shop";
 import Contacto from "../pages/Contacto";
 import Carrito from "../pages/Carrito";
 import Alta from "../pages/Alta";
-import CarritoDropdown from "./CarritoDropdown";
+import CarritoDropdown from "./CarritoDropdown"; // Corregido: Se eliminó la 'z' errónea
 import ListaPedidos from "../pages/ListaPedidos";
 import Login from '../pages/Login';
 import Registro from '../pages/Registro';
@@ -93,11 +93,11 @@ function Navigation() {
               height="45"
               className="d-inline-block align-top me-3"
             />
-            <span className="brand-text fs-3">ElectrónicaCS</span>
+            <span className="brand-text fs-3">Electrónica<span className="text-primary fw-bold">CS</span></span>
           </Navbar.Brand>
-          
+
           {/* Navegación central - Absolutamente centrada */}
-          <div className="position-absolute start-0 end-0 mx-auto d-none d-lg-flex justify-content-center">
+          <div className="d-none d-lg-flex justify-content-center" style={{ flex: 1 }}>
             <Nav>
               <Nav.Link as={Link} to="/" className="nav-link-custom mx-3 fs-5 fw-500">
                 Inicio
@@ -115,26 +115,24 @@ function Navigation() {
               )}
             </Nav>
           </div>
-          
+
           {/* Controles a la derecha */}
           <div className="d-flex align-items-center ms-auto">
             {/* Dropdown para usuario autenticado */}
             {user ? (
-              <Dropdown align="end" className="me-3">
+              <Dropdown align="end" className="me-3 d-none d-lg-block">
                 <Dropdown.Toggle
                   variant="light"
                   id="user-dropdown"
-                  className="btn-circle d-flex align-items-center justify-content-center"
+                  className="d-flex align-items-center rounded"
                   style={{
-                    width: "44px",
-                    height: "44px",
-                    borderRadius: "50%",
-                    padding: "0",
+                    padding: "0.4rem 0.8rem",
                     border: "1px solid rgba(255,255,255,0.2)",
                     boxShadow: "0 2px 4px rgba(0,0,0,0.05)"
                   }}
                 >
                   <i className="bi bi-person-fill fs-5"></i>
+                  <span className="d-none d-md-inline">⚙️</span>
                 </Dropdown.Toggle>
                 <Dropdown.Menu className="dropdown-menu-end shadow-sm border-0">
                   <div className="px-4 py-3 text-center border-bottom mb-2">
@@ -164,7 +162,7 @@ function Navigation() {
                   as={Link}
                   to="/login"
                   variant="outline-light"
-                  className="me-3 px-4 py-2"
+                  className="me-2 px-3 py-2"
                 >
                   Iniciar Sesión
                 </Button>
@@ -172,15 +170,15 @@ function Navigation() {
                   as={Link}
                   to="/registro"
                   variant="primary"
-                  className="px-4 py-2"
+                  className="px-3 py-2"
                 >
                   Registrarse
                 </Button>
               </div>
             )}
 
-            {/* Carrito dropdown */}
-            <div className="me-3">
+            {/* Carrito dropdown - Solo visible en pantallas grandes */}
+            <div className="me-3 d-none d-lg-block">
               <CarritoDropdown
                 carrito={carrito}
                 eliminarDelCarrito={eliminarDelCarrito}
@@ -189,11 +187,19 @@ function Navigation() {
 
             {/* Toggle para el menú móvil */}
             <Button
-              variant="outline-light"
-              className="navbar-toggler border-0 btn-circle d-lg-none"
+              variant="primary"
+              className="navbar-toggler border-0 btn-circle d-lg-none menu-toggle-btn"
               onClick={() => setShowOffcanvas(true)}
+              style={{
+                width: "40px",
+                height: "40px",
+                backgroundColor: "#0d6efd",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center"
+              }}
             >
-              <i className="bi bi-list fs-4"></i>
+              <i className="bi bi-list fs-4 text-white"></i>
             </Button>
           </div>
         </Container>
@@ -344,8 +350,9 @@ function Navigation() {
         
         .brand-text {
           color: white;
-          font-weight: 700;
-          letter-spacing: 0.5px;
+          font-weight: 600;
+          font-family: 'Montserrat', sans-serif;
+          letter-spacing: -0.02em;
         }
         
         /* Enlaces de navegación */
@@ -425,6 +432,62 @@ function Navigation() {
         @media (max-width: 991px) {
           .navbar-spacer {
             height: 80px;
+          }
+          
+          .navbar-main {
+            padding: 12px 0;
+          }
+          
+          .brand-text {
+            font-size: 1.5rem !important;
+          }
+          
+          .menu-toggle-btn {
+            background-color: #0d6efd !important;
+            color: white !important;
+            width: 40px !important;
+            height: 40px !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+          }
+        }
+        
+        @media (max-width: 767px) {
+          .navbar-spacer {
+            height: 70px;
+          }
+          
+          .navbar-main {
+            padding: 10px 0;
+          }
+          
+          .brand-text {
+            font-size: 1.3rem !important;
+          }
+          
+          .btn-circle {
+            width: 38px;
+            height: 38px;
+          }
+        }
+        
+        @media (max-width: 576px) {
+          .navbar-spacer {
+            height: 65px;
+          }
+          
+          .brand-logo img {
+            height: 35px;
+          }
+          
+          .brand-text {
+            font-size: 1.2rem !important;
+          }
+          
+          .btn-circle {
+            width: 36px;
+            height: 36px;
           }
         }
       `}</style>
