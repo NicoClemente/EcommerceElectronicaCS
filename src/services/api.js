@@ -181,22 +181,17 @@ export const subirImagen = async (file) => {
   formData.append('image', file);
   
   try {
-    const response = await fetch(`${process.env.REACT_APP_API_URL}/upload/image`, {
-      method: 'POST',
-      body: formData,
+    const token = localStorage.getItem('token');
+    const response = await axios.post('/upload/image', formData, {
       headers: {
-        'Authorization': `Bearer ${localStorage.getItem('token')}`
+        'Content-Type': 'multipart/form-data',
+        'Authorization': `Bearer ${token}`
       }
     });
     
-    if (!response.ok) {
-      throw new Error('Error al cargar la imagen');
-    }
-    
-    const data = await response.json();
-    return data.imageUrl; // URL de la imagen subida
+    return response.data.imageUrl;
   } catch (error) {
-    console.error('Error:', error);
-    throw error;
+    console.error('Error detallado al subir imagen:', error.response?.data || error);
+    throw new Error(error.response?.data?.error || 'Error al cargar la imagen');
   }
 };
