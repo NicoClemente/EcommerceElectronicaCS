@@ -168,22 +168,26 @@ function Navigation() {
               </Dropdown>
             ) : (
               <div className="d-none d-lg-flex me-3">
-                <Button
-                  as={Link}
-                  to="/login"
-                  variant="outline-light"
-                  className="me-2 px-3 py-2"
-                >
-                  Iniciar Sesión
-                </Button>
-                <Button
-                  as={Link}
-                  to="/registro"
-                  variant="primary"
-                  className="px-3 py-2"
-                >
-                  Registrarse
-                </Button>
+                {!user && (
+                  <>
+                    <Button
+                      as={Link}
+                      to="/login"
+                      variant="outline-light"
+                      className="me-2 px-3 py-2"
+                    >
+                      Iniciar Sesión
+                    </Button>
+                    <Button
+                      as={Link}
+                      to="/registro"
+                      variant="primary"
+                      className="px-3 py-2"
+                    >
+                      Registrarse
+                    </Button>
+                  </>
+                )}
               </div>
             )}
 

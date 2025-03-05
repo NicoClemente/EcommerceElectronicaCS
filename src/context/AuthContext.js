@@ -4,17 +4,31 @@ const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const storedUser = localStorage.getItem('user');
     if (storedUser) {
-      setUser(JSON.parse(storedUser));
+      try {
+        setUser(JSON.parse(storedUser));
+      } catch (error) {
+        console.error('Error al parsear usuario almacenado:', error);
+        localStorage.removeItem('user');
+        localStorage.removeItem('token');
+      }
     }
+    setLoading(false);
   }, []);
 
   const login = (userData) => {
     setUser(userData);
     localStorage.setItem('user', JSON.stringify(userData));
+  };
+
+  const updateUserData = (newUserData) => {
+    const updatedUser = { ...user, ...newUserData };
+    setUser(updatedUser);
+    localStorage.setItem('user', JSON.stringify(updatedUser));
   };
 
   const logout = () => {
@@ -24,9 +38,18 @@ export const AuthProvider = ({ children }) => {
     window.location.href = '/';
   };
 
+  const value = {
+    user,
+    loading,
+    login,
+    logout,
+    updateUserData,
+    isAuthenticated: !!user
+  };
+
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
-      {children}
+    <AuthContext.Provider value={value}>
+      {!loading ? children : null}
     </AuthContext.Provider>
   );
 };
@@ -38,3 +61,5 @@ export const useAuth = () => {
   }
   return context;
 };
+
+export default AuthContext;

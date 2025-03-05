@@ -1,6 +1,5 @@
-// src/pages/Registro.js
-import React, { useState } from 'react';
-import { Form, Button, Container, Alert } from 'react-bootstrap';
+import React, { useState, useEffect } from 'react';
+import { Form, Button, Container, Alert, Spinner } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
 import { registerUser } from '../services/api';
 import { useAuth } from '../context/AuthContext';
@@ -9,93 +8,166 @@ const Registro = () => {
   const [formData, setFormData] = useState({
     nombre: '',
     email: '',
-    password: ''
+    password: '',
+    confirmPassword: ''
   });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const { login } = useAuth();
+  const { login, user } = useAuth();
+
+  useEffect(() => {
+    if (user) {
+      navigate('/');
+    }
+  }, [user, navigate]);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value
+    });
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
     setError('');
 
+    if (formData.password !== formData.confirmPassword) {
+      setError('Las contraseñas no coinciden');
+      return;
+    }
+
+    setLoading(true);
+
     try {
-      const response = await registerUser(formData);
-      if (response.usuario) {
+      const userData = {
+        nombre: formData.nombre,
+        email: formData.email,
+        password: formData.password
+      };
+
+      const response = await registerUser(userData);
+      
+      if (response.token) {
         login(response.usuario);
         navigate('/');
       } else {
-        setError('Error en el registro');
+        setError('Respuesta inválida del servidor');
       }
-    } catch (err) {
-      setError(err.message || 'Error al registrar usuario');
+    } catch (error) {
+      console.error('Error al registrar:', error);
+      setError(error.response?.data?.error || 'Error al registrarse');
     } finally {
       setLoading(false);
     }
   };
 
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
-  };
+  if (user) {
+    return null;
+  }
 
   return (
-    <Container className="mt-5">
-      <h2>Registro</h2>
-      {error && <Alert variant="danger">{error}</Alert>}
-      <Form onSubmit={handleSubmit}>
-        <Form.Group className="mb-3">
-          <Form.Label>Nombre</Form.Label>
-          <Form.Control
-            type="text"
-            name="nombre"
-            value={formData.nombre}
-            onChange={handleChange}
-            required
-            disabled={loading}
-          />
-        </Form.Group>
+    <Container className="py-5">
+      <div className="row justify-content-center">
+        <div className="col-md-6 col-lg-5">
+          <div className="card shadow-sm">
+            <div className="card-body p-4 p-md-5">
+              <h2 className="text-center mb-4">Crear Cuenta</h2>
+              
+              {error && (
+                <Alert variant="danger" onClose={() => setError('')} dismissible>
+                  {error}
+                </Alert>
+              )}
+              
+              <Form onSubmit={handleSubmit}>
+                <Form.Group className="mb-3">
+                  <Form.Label>Nombre completo</Form.Label>
+                  <Form.Control
+                    type="text"
+                    name="nombre"
+                    value={formData.nombre}
+                    onChange={handleChange}
+                    required
+                    disabled={loading}
+                    placeholder="Ingresa tu nombre"
+                  />
+                </Form.Group>
 
-        <Form.Group className="mb-3">
-          <Form.Label>Email</Form.Label>
-          <Form.Control
-            type="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            required
-            disabled={loading}
-          />
-        </Form.Group>
+                <Form.Group className="mb-3">
+                  <Form.Label>Correo electrónico</Form.Label>
+                  <Form.Control
+                    type="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    required
+                    disabled={loading}
+                    placeholder="Ingresa tu email"
+                  />
+                </Form.Group>
 
-        <Form.Group className="mb-3">
-          <Form.Label>Contraseña</Form.Label>
-          <Form.Control
-            type="password"
-            name="password"
-            value={formData.password}
-            onChange={handleChange}
-            required
-            disabled={loading}
-            minLength={6}
-          />
-        </Form.Group>
+                <Form.Group className="mb-3">
+                  <Form.Label>Contraseña</Form.Label>
+                  <Form.Control
+                    type="password"
+                    name="password"
+                    value={formData.password}
+                    onChange={handleChange}
+                    required
+                    disabled={loading}
+                    placeholder="Crea una contraseña"
+                  />
+                </Form.Group>
 
-        <Button 
-          variant="primary" 
-          type="submit"
-          disabled={loading}
-        >
-          {loading ? 'Registrando...' : 'Registrarse'}
-        </Button>
-        <p className="mt-3">
-          ¿Ya tienes cuenta? <Link to="/login">Inicia sesión aquí</Link>
-        </p>
-      </Form>
+                <Form.Group className="mb-4">
+                  <Form.Label>Confirmar contraseña</Form.Label>
+                  <Form.Control
+                    type="password"
+                    name="confirmPassword"
+                    value={formData.confirmPassword}
+                    onChange={handleChange}
+                    required
+                    disabled={loading}
+                    placeholder="Repite la contraseña"
+                  />
+                </Form.Group>
+
+                <Button
+                  variant="primary"
+                  type="submit"
+                  disabled={loading}
+                  className="w-100 py-2 mb-3"
+                >
+                  {loading ? (
+                    <>
+                      <Spinner
+                        as="span"
+                        animation="border"
+                        size="sm"
+                        role="status"
+                        aria-hidden="true"
+                        className="me-2"
+                      />
+                      Creando cuenta...
+                    </>
+                  ) : (
+                    'Registrarse'
+                  )}
+                </Button>
+                
+                <div className="text-center">
+                  <p className="mb-0">
+                    ¿Ya tienes cuenta? <Link to="/login" className="text-decoration-none">Inicia sesión</Link>
+                  </p>
+                </div>
+              </Form>
+            </div>
+          </div>
+        </div>
+      </div>
     </Container>
   );
 };
