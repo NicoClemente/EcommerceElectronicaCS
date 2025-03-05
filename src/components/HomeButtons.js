@@ -22,7 +22,7 @@ const HomeButtons = () => {
             <div className="card-img-wrapper">
               <Card.Img 
                 variant="top" 
-                src="/images/shop-category.jpg" 
+                src="/images/shop-category1.jpg" 
                 alt="Tienda"
                 className="category-img"
               />

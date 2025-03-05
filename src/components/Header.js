@@ -160,7 +160,7 @@ const Header = () => {
       <Container className="py-5">
         <Row className="justify-content-center">
           <Col lg={10} className="text-center">
-            <h1 className="display-4 fw-bold mb-4">Bienvenido a ElectrónicaCS</h1>
+          <h1 className="display-4 fw-bold mb-4 welcome-title">Bienvenido a ElectrónicaCS</h1>
             <p className="lead mb-5">
               Somos tu destino de confianza para encontrar lo mejor en tecnología y electrónica. Descubre nuestra cuidadosa selección de productos de vanguardia, diseñada para brindarte experiencias excepcionales. ¡Explora ahora y lleva a casa la innovación que estabas buscando!
             </p>
@@ -206,13 +206,24 @@ const Header = () => {
 
       {/* Estilos CSS para el header */}
       <style jsx="true">{`
+
+        .welcome-title {
+          font-family: 'Montserrat', sans-serif;
+          font-weight: 700; /* Ya definido en tu carga de fuente */
+          color: #2c3e50;
+          letter-spacing: -1.5px;
+          background: linear-gradient(45deg, #5E35B1, #3949AB);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          text-shadow: 1px 1px 2px rgba(0,0,0,0.05);
+        }
         .carousel-image-container {
           position: relative;
-          height: 500px;
+          height: 400px;
           background-size: cover;
           background-position: center;
           background-repeat: no-repeat;
-        }
+        }       
         
         .carousel-overlay {
           position: absolute;

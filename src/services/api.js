@@ -64,6 +64,34 @@ export const loginUser = async (credentials) => {
   }
 };
 
+export const actualizarPerfil = async (userData) => {
+  try {
+    const response = await api.put('/auth/perfil', userData);
+    
+    // Actualiza la información del usuario en localStorage
+    if (response.data.success) {
+      const userData = JSON.parse(localStorage.getItem('user') || '{}');
+      const updatedUser = { ...userData, ...response.data.usuario };
+      localStorage.setItem('user', JSON.stringify(updatedUser));
+    }
+    
+    return response.data;
+  } catch (error) {
+    console.error('Error al actualizar perfil:', error);
+    throw error.response?.data || error;
+  }
+};
+
+export const cambiarPassword = async (passwordData) => {
+  try {
+    const response = await api.put('/auth/cambiar-password', passwordData);
+    return response.data;
+  } catch (error) {
+    console.error('Error al cambiar contraseña:', error);
+    throw error.response?.data || error;
+  }
+};
+
 export const logout = () => {
   localStorage.removeItem('token');
   localStorage.removeItem('user');
@@ -181,17 +209,28 @@ export const subirImagen = async (file) => {
   formData.append('image', file);
   
   try {
-    const token = localStorage.getItem('token');
-    const response = await axios.post('/upload/image', formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-        'Authorization': `Bearer ${token}`
+    console.log('Base URL:', baseURL);
+    console.log('Full Upload URL:', `upload/image`);
+    
+    const response = await api.post(
+      'upload/image', 
+      formData, 
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
       }
-    });
+    );
     
     return response.data.imageUrl;
   } catch (error) {
-    console.error('Error detallado al subir imagen:', error.response?.data || error);
+    console.error('Error detallado al subir imagen:', {
+      baseURL,
+      fullURL: `upload/image`,
+      response: error.response,
+      message: error.message,
+      config: error.config
+    });
     throw new Error(error.response?.data?.error || 'Error al cargar la imagen');
   }
 };

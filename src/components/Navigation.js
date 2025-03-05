@@ -7,12 +7,14 @@ import Shop from "../pages/Shop";
 import Contacto from "../pages/Contacto";
 import Carrito from "../pages/Carrito";
 import Alta from "../pages/Alta";
-import CarritoDropdown from "./CarritoDropdown"; // Corregido: Se eliminó la 'z' errónea
+import CarritoDropdown from "./CarritoDropdown";
 import ListaPedidos from "../pages/ListaPedidos";
 import Login from '../pages/Login';
 import Registro from '../pages/Registro';
 import ResultadoPago from "../pages/ResultadoPago";
 import { isAdmin } from "../utils/roleUtils";
+import Perfil from "../pages/Perfil";
+import ThemeToggle from "./ThemeToggle";
 
 function Navigation() {
   const [carrito, setCarrito] = useState([]);
@@ -118,6 +120,11 @@ function Navigation() {
 
           {/* Controles a la derecha */}
           <div className="d-flex align-items-center ms-auto">
+            {/* Botón de Tema (Claro/Oscuro) */}
+            <div className="me-3 d-none d-lg-block">
+              <ThemeToggle />
+            </div>
+            
             {/* Dropdown para usuario autenticado */}
             {user ? (
               <Dropdown align="end" className="me-3 d-none d-lg-block">
@@ -142,6 +149,9 @@ function Navigation() {
                       <Badge bg="danger" className="ms-2">Admin</Badge>
                     )}
                   </div>
+                  <Dropdown.Item as={Link} to="/perfil" className="py-2">
+                    <i className="bi bi-person-gear me-2"></i> Mi Perfil
+                  </Dropdown.Item>
                   <Dropdown.Item as={Link} to="/pedidos" className="py-2">
                     <i className="bi bi-box me-2"></i> Mis Pedidos
                   </Dropdown.Item>
@@ -250,6 +260,14 @@ function Navigation() {
                     <p className="mb-1 fw-bold fs-5">{user.nombre}</p>
                     <small className="text-muted">{user.email}</small>
                   </div>
+                  <Button
+                    as={Link}
+                    to="/perfil"
+                    variant="outline-primary"
+                    className="w-100 mb-3 py-2"
+                  >
+                    <i className="bi bi-person-gear me-2"></i> Mi Perfil
+                  </Button>
                   {userIsAdmin && (
                     <Button
                       as={Link}
@@ -289,6 +307,15 @@ function Navigation() {
                 </>
               )}
             </div>
+            
+            {/* Botón de cambio de tema en el menú móvil */}
+            <div className="mobile-nav-section mt-4">
+              <h6 className="text-uppercase text-muted fw-bold small mb-3">Preferencias</h6>
+              <div className="d-flex justify-content-between align-items-center p-2 bg-light rounded">
+                <span>Modo de tema</span>
+                <ThemeToggle />
+              </div>
+            </div>
           </div>
         </Offcanvas.Body>
       </Offcanvas>
@@ -310,6 +337,7 @@ function Navigation() {
         <Route path="/login" element={<Login />} />
         <Route path="/registro" element={<Registro />} />
         <Route path="/alta" element={<Alta />} />
+        <Route path="/perfil" element={<Perfil />} />
         <Route
           path="/carrito"
           element={
@@ -426,6 +454,19 @@ function Navigation() {
         .mobile-nav-link:hover {
           background-color: rgba(13, 110, 253, 0.05);
           transform: translateX(5px);
+        }
+        
+        /* Tema oscuro adaptación */
+        [data-bs-theme="dark"] .navbar-main {
+          background-color: #121212;
+        }
+        
+        [data-bs-theme="dark"] .navbar-scrolled {
+          background-color: rgba(18, 18, 18, 0.95);
+        }
+        
+        [data-bs-theme="dark"] .brand-text {
+          color: #f8f9fa;
         }
         
         /* Responsive */

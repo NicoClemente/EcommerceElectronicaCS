@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Form, Button, Container, Row, Col, Card, Alert, Spinner } from 'react-bootstrap';
-import { agregarProducto, obtenerDetallesItem } from '../services/api';
+import { Form, Button, Container, Row, Col, Card, Alert, Spinner, Tabs, Tab } from 'react-bootstrap';
+import { agregarProducto, obtenerDetallesItem, subirImagen } from '../services/api';
 import { isAdmin } from '../utils/roleUtils';
 import { useNavigate } from 'react-router-dom';
 
@@ -13,12 +13,17 @@ const Alta = () => {
     marca: '',
     imagen: '',
     categoria: '',
+    destacado: false,
   });
 
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState('');
   const [itemAgregado, setItemAgregado] = useState(null);
+  const [activeTab, setActiveTab] = useState('url');
+  const [file, setFile] = useState(null);
+  const [uploadingImage, setUploadingImage] = useState(false);
+
   // Cambiado de useState a una constante para evitar el warning
   const categorias = [
     'Computadoras', 'Smartphones', 'Electrodomésticos', 'Audio', 'Televisores', 'Accesorios'
@@ -35,6 +40,27 @@ const Alta = () => {
       }, 2000);
     }
   }, [navigate]);
+
+  const handleImageUpload = async () => {
+    if (!file) return;
+
+    try {
+      setUploadingImage(true);
+      const imageUrl = await subirImagen(file);
+      setFormulario({ ...formulario, imagen: imageUrl });
+      setUploadingImage(false);
+    } catch (error) {
+      console.error("Error al subir la imagen:", error);
+      setError('Error al subir la imagen');
+      setUploadingImage(false);
+    }
+  };
+
+  const handleFileChange = (e) => {
+    if (e.target.files && e.target.files[0]) {
+      setFile(e.target.files[0]);
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -59,7 +85,7 @@ const Alta = () => {
       setItemAgregado(respuesta);
       await obtenerDetallesItem(respuesta);
       setSuccess(true);
-      
+
       // Resetear el formulario después de un tiempo
       setTimeout(() => {
         setFormulario({
@@ -73,7 +99,7 @@ const Alta = () => {
         setSuccess(false);
         setItemAgregado(null);
       }, 3000);
-      
+
     } catch (error) {
       console.error('Error al agregar el ítem:', error);
       setError('Error al agregar el producto. Por favor intente nuevamente.');
@@ -112,14 +138,14 @@ const Alta = () => {
                   {error}
                 </Alert>
               )}
-              
+
               {success && (
                 <Alert variant="success" onClose={() => setSuccess(false)} dismissible>
                   <Alert.Heading>¡Producto agregado exitosamente!</Alert.Heading>
                   <p>El producto {itemAgregado?.titulo} ha sido agregado al catálogo.</p>
                 </Alert>
               )}
-              
+
               <Form onSubmit={handleSubmit}>
                 <Row>
                   <Col md={8}>
@@ -135,7 +161,7 @@ const Alta = () => {
                       />
                     </Form.Group>
                   </Col>
-                  
+
                   <Col md={4}>
                     <Form.Group className="mb-3">
                       <Form.Label>Precio</Form.Label>
@@ -166,7 +192,7 @@ const Alta = () => {
                       />
                     </Form.Group>
                   </Col>
-                  
+
                   <Col md={6}>
                     <Form.Group className="mb-3">
                       <Form.Label>Categoría</Form.Label>
@@ -186,21 +212,75 @@ const Alta = () => {
                     </Form.Group>
                   </Col>
                 </Row>
-
-                <Form.Group className="mb-3">
-                  <Form.Label>URL de la Imagen</Form.Label>
-                  <Form.Control
-                    type="url"
-                    name="imagen"
-                    value={formulario.imagen}
-                    onChange={handleChange}
-                    placeholder="https://ejemplo.com/imagen.jpg"
+                <Form.Group controlId="destacado" className="mb-3">
+                  <Form.Check
+                    type="checkbox"
+                    label="Producto destacado (aparecerá en la página principal)"
+                    name="destacado"
+                    checked={formulario.destacado}
+                    onChange={(e) => setFormulario({ ...formulario, destacado: e.target.checked })}
                     disabled={loading}
                   />
-                  <Form.Text className="text-muted">
-                    Ingrese la URL de una imagen para el producto
-                  </Form.Text>
                 </Form.Group>
+                <Form.Group className="mb-3">
+                  <Form.Label>Imagen del producto</Form.Label>
+                  <Tabs
+                    activeKey={activeTab}
+                    onSelect={(k) => setActiveTab(k)}
+                    className="mb-3"
+                  >
+                    <Tab eventKey="url" title="URL externa">
+                      <Form.Control
+                        type="url"
+                        name="imagen"
+                        value={formulario.imagen}
+                        onChange={handleChange}
+                        placeholder="https://ejemplo.com/imagen.jpg"
+                        disabled={loading}
+                      />
+                      <Form.Text className="text-muted">
+                        Introduce la URL directa de una imagen
+                      </Form.Text>
+                    </Tab>
+                    <Tab eventKey="file" title="Subir archivo">
+                      <Row>
+                        <Col>
+                          <Form.Control
+                            type="file"
+                            accept="image/*"
+                            onChange={handleFileChange}
+                            disabled={loading}
+                          />
+                        </Col>
+                        <Col xs="auto">
+                          <Button
+                            onClick={handleImageUpload}
+                            disabled={!file || uploadingImage || loading}
+                            variant="outline-primary"
+                          >
+                            {uploadingImage ? 'Subiendo...' : 'Subir'}
+                          </Button>
+                        </Col>
+                      </Row>
+                      <Form.Text className="text-muted">
+                        Sube una imagen desde tu dispositivo
+                      </Form.Text>
+                    </Tab>
+                  </Tabs>
+                </Form.Group>
+
+                {/* Vista previa de imagen */}
+                {formulario.imagen && (
+                  <div className="text-center mb-3">
+                    <p>Vista previa:</p>
+                    <img
+                      src={formulario.imagen}
+                      alt="Vista previa"
+                      style={{ maxWidth: '100%', maxHeight: '200px', objectFit: 'contain' }}
+                      className="border p-2"
+                    />
+                  </div>
+                )}
 
                 <Form.Group className="mb-4">
                   <Form.Label>Descripción</Form.Label>
@@ -216,8 +296,8 @@ const Alta = () => {
                 </Form.Group>
 
                 <div className="d-grid">
-                  <Button 
-                    variant="primary" 
+                  <Button
+                    variant="primary"
                     type="submit"
                     disabled={loading}
                     className="py-2"
@@ -235,7 +315,7 @@ const Alta = () => {
               </Form>
             </Card.Body>
           </Card>
-          
+
           {itemAgregado && (
             <Card className="mt-4 shadow-sm">
               <Card.Header className="bg-success text-white">
@@ -244,9 +324,9 @@ const Alta = () => {
               <Card.Body>
                 <Row>
                   <Col md={4} className="text-center">
-                    <img 
-                      src={itemAgregado.imagen} 
-                      alt={itemAgregado.titulo} 
+                    <img
+                      src={itemAgregado.imagen}
+                      alt={itemAgregado.titulo}
                       className="img-fluid mb-3"
                       style={{ maxHeight: "200px", objectFit: "contain" }}
                     />
@@ -254,14 +334,14 @@ const Alta = () => {
                   <Col md={8}>
                     <h4>{itemAgregado.titulo}</h4>
                     <p className="text-primary fs-5">${itemAgregado.precio}</p>
-                    
+
                     <div className="mb-2">
                       <small className="text-muted">Marca: {itemAgregado.marca}</small>
                     </div>
                     <div className="mb-2">
                       <small className="text-muted">Categoría: {itemAgregado.categoria}</small>
                     </div>
-                    
+
                     <p>{itemAgregado.descripcion}</p>
                   </Col>
                 </Row>

@@ -10,16 +10,17 @@ const EditModal = ({ producto, showModal, onClose }) => {
     marca: producto.marca,
     imagen: producto.imagen,
     categoria: producto.categoria,
+    destacado: producto.destacado || false,
   });
   const [file, setFile] = useState(null);
   const [uploadingImage, setUploadingImage] = useState(false);
   const [activeTab, setActiveTab] = useState('url');
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormulario({ ...formulario, [name]: value });
+    const { name, value, type, checked } = e.target;
+    const newValue = type === 'checkbox' ? checked : value;
+    setFormulario({ ...formulario, [name]: newValue });
   };
-
   const handleFileChange = (e) => {
     if (e.target.files && e.target.files[0]) {
       setFile(e.target.files[0]);
@@ -134,8 +135,19 @@ const EditModal = ({ producto, showModal, onClose }) => {
                   required
                 />
               </Form.Group>
-            </Col>
+            </Col>    
           </Row>
+          
+          {/* Prdocto destacado */}
+          <Form.Group controlId="destacado" className="mb-3">
+            <Form.Check
+              type="checkbox"
+              label="Producto destacado (aparecerá en la página principal)"
+              name="destacado"
+              checked={formulario.destacado}
+              onChange={handleChange}
+            />
+          </Form.Group>
 
           {/* Selector de método de carga de imagen */}
           <Form.Group className="mb-3">
@@ -169,8 +181,8 @@ const EditModal = ({ producto, showModal, onClose }) => {
                     />
                   </Col>
                   <Col xs="auto">
-                    <Button 
-                      onClick={handleImageUpload} 
+                    <Button
+                      onClick={handleImageUpload}
                       disabled={!file || uploadingImage}
                       variant="outline-primary"
                     >
@@ -189,10 +201,10 @@ const EditModal = ({ producto, showModal, onClose }) => {
           {formulario.imagen && (
             <div className="text-center mb-3">
               <p>Vista previa:</p>
-              <img 
-                src={formulario.imagen} 
-                alt="Vista previa" 
-                style={{ maxWidth: '100%', maxHeight: '200px', objectFit: 'contain' }} 
+              <img
+                src={formulario.imagen}
+                alt="Vista previa"
+                style={{ maxWidth: '100%', maxHeight: '200px', objectFit: 'contain' }}
                 className="border p-2"
               />
             </div>

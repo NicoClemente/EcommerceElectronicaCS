@@ -1,13 +1,31 @@
-import React from 'react';
-import { Container, Row, Col, Card, Button } from 'react-bootstrap';
+import React, { useEffect, useState } from 'react';
+import { Container, Row, Col, Card, Button, Spinner } from 'react-bootstrap';
 import Header from '../components/Header';
 import HomeButtons from '../components/HomeButtons';
 import { Link } from 'react-router-dom';
+import { obtenerProductos } from '../services/api';
 
-const Home = () => {
-  // Podemos agregar algunas secciones adicionales para modernizar la página principal
-  
-  // Categorías destacadas
+const Home = ({ agregarAlCarrito }) => {
+  const [productosDestacados, setProductosDestacados] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const cargarProductosDestacados = async () => {
+      try {
+        setLoading(true);
+        const productos = await obtenerProductos();
+        const destacados = productos.filter(producto => producto.destacado);
+        setProductosDestacados(destacados.slice(0, 4));
+        setLoading(false);
+      } catch (error) {
+        console.error('Error al cargar productos destacados:', error);
+        setLoading(false);
+      }
+    };
+
+    cargarProductosDestacados();
+  }, []);
+
   const featuredCategories = [
     {
       name: 'Smartphones',
@@ -30,47 +48,12 @@ const Home = () => {
       description: 'Sumérgete en una experiencia sonora excepcional.'
     }
   ];
-  
-  // Productos destacados (estos deberían venir de tu API en un caso real)
-  const featuredProducts = [
-    {
-      id: '1',
-      title: 'Smartphone Galaxy S23',
-      image: '/images/product-smartphone.jpg',
-      price: 250000,
-      category: 'Smartphones'
-    },
-    {
-      id: '2',
-      title: 'Notebook Lenovo ThinkPad',
-      image: '/images/product-laptop.jpg',
-      price: 450000,
-      category: 'Computadoras'
-    },
-    {
-      id: '3',
-      title: 'Televisor Smart 55"',
-      image: '/images/product-tv.jpg',
-      price: 320000,
-      category: 'Televisores'
-    },
-    {
-      id: '4',
-      title: 'Auriculares Bluetooth',
-      image: '/images/product-headphones.jpg',
-      price: 35000,
-      category: 'Audio'
-    }
-  ];
 
   return (
     <div className="home-page">
-      {/* Header mejorado con carrusel y sección de bienvenida */}
       <Header />
-      
-      {/* Sección de botones de navegación mejorada */}
       <HomeButtons />
-      
+
       {/* Nueva sección: Categorías destacadas */}
       <section className="featured-categories py-5 bg-light">
         <Container>
@@ -84,15 +67,15 @@ const Home = () => {
               borderRadius: '2px'
             }}></span>
           </h2>
-          
+
           <Row className="g-4">
             {featuredCategories.map((category, index) => (
               <Col md={6} lg={3} key={index}>
                 <Card className="h-100 border-0 shadow-sm category-card">
                   <div className="category-img-container">
-                    <Card.Img 
-                      variant="top" 
-                      src={category.image} 
+                    <Card.Img
+                      variant="top"
+                      src={category.image}
                       alt={category.name}
                       className="category-img"
                     />
@@ -102,8 +85,8 @@ const Home = () => {
                   </div>
                   <Card.Body>
                     <p className="card-text">{category.description}</p>
-                    <Link 
-                      to="/shop" 
+                    <Link
+                      to="/shop"
                       className="stretched-link text-decoration-none"
                     >
                       Ver productos <i className="bi bi-arrow-right ms-1"></i>
@@ -115,8 +98,8 @@ const Home = () => {
           </Row>
         </Container>
       </section>
-      
-      {/* Nueva sección: Productos destacados */}
+
+      {/* Sección de productos destacados actualizada para usar datos de la API */}
       <section className="featured-products py-5">
         <Container>
           <h2 className="text-center mb-5 position-relative pb-3">
@@ -129,48 +112,65 @@ const Home = () => {
               borderRadius: '2px'
             }}></span>
           </h2>
-          
-          <Row className="g-4">
-            {featuredProducts.map((product, index) => (
-              <Col md={6} lg={3} key={index}>
-                <Card className="h-100 border-0 shadow-sm product-card">
-                  <div className="product-badge">
-                    {index === 0 && <span className="badge bg-danger">Nuevo</span>}
-                    {index === 1 && <span className="badge bg-success">Oferta</span>}
-                  </div>
-                  <div className="product-img-container">
-                    <Card.Img 
-                      variant="top" 
-                      src={product.image} 
-                      alt={product.title}
-                      className="product-img"
-                    />
-                  </div>
-                  <Card.Body className="d-flex flex-column">
-                    <span className="text-muted small mb-1">{product.category}</span>
-                    <Card.Title className="mb-2">{product.title}</Card.Title>
-                    <div className="product-rating mb-2">
-                      <i className="bi bi-star-fill text-warning"></i>
-                      <i className="bi bi-star-fill text-warning"></i>
-                      <i className="bi bi-star-fill text-warning"></i>
-                      <i className="bi bi-star-fill text-warning"></i>
-                      <i className="bi bi-star-half text-warning"></i>
-                      <small className="ms-1 text-muted">(4.5)</small>
+
+          {loading ? (
+            <div className="text-center py-5">
+              <Spinner animation="border" variant="primary" />
+              <p className="mt-3">Cargando productos destacados...</p>
+            </div>
+          ) : productosDestacados.length > 0 ? (
+            <Row className="g-4">
+              {productosDestacados.map((product, index) => (
+                <Col md={6} lg={3} key={product._id || index}>
+                  <Card className="h-100 border-0 shadow-sm product-card">
+                    <div className="product-badge">
+                      {index === 0 && <span className="badge bg-danger">Nuevo</span>}
+                      {index === 1 && <span className="badge bg-success">Oferta</span>}
                     </div>
-                    <div className="product-price mt-auto mb-3">
-                      <h5 className="mb-0 text-primary">${product.price.toLocaleString()}</h5>
+                    <div className="product-img-container">
+                      <Card.Img
+                        variant="top"
+                        src={product.imagen}
+                        alt={product.titulo}
+                        className="product-img"
+                      />
                     </div>
-                    <div className="d-grid">
-                      <Button variant="outline-primary">Ver Detalles</Button>
-                    </div>
-                  </Card.Body>
-                </Card>
-              </Col>
-            ))}
-          </Row>
-          
+                    <Card.Body className="d-flex flex-column">
+                      <span className="text-muted small mb-1">{product.categoria}</span>
+                      <Card.Title className="mb-2">{product.titulo}</Card.Title>
+                      <div className="product-price mt-auto mb-3">
+                        <h5 className="mb-0 text-primary">${Number(product.precio).toLocaleString()}</h5>
+                      </div>
+                      <div className="d-flex flex-column">
+                        <Button
+                          variant="outline-primary"
+                          className="w-100 mb-2"
+                          as={Link}
+                          to={`/shop?product=${product._id}`}
+                        >
+                          Ver Detalles
+                        </Button>
+                        <Button
+                          variant="primary"
+                          onClick={() => agregarAlCarrito && agregarAlCarrito(product)}
+                          className="w-100"
+                        >
+                          <i className="bi bi-cart-plus me-2"></i>Agregar al Carrito
+                        </Button>
+                      </div>
+                    </Card.Body>
+                  </Card>
+                </Col>
+              ))}
+            </Row>
+          ) : (
+            <div className="text-center py-4">
+              <p className="text-muted">No hay productos destacados actualmente</p>
+            </div>
+          )}
+
           <div className="text-center mt-5">
-            <Button 
+            <Button
               as={Link}
               to="/shop"
               variant="primary"
@@ -182,7 +182,7 @@ const Home = () => {
           </div>
         </Container>
       </section>
-      
+
       {/* Nueva sección: Banner promocional */}
       <section className="promo-banner my-5">
         <div className="banner-container">
@@ -195,7 +195,7 @@ const Home = () => {
                     Hasta 30% de descuento en productos seleccionados.
                     No te pierdas estas increíbles promociones por tiempo limitado.
                   </p>
-                  <Button 
+                  <Button
                     as={Link}
                     to="/shop"
                     variant="light"
@@ -210,9 +210,10 @@ const Home = () => {
           </div>
         </div>
       </section>
-      
+
       {/* Estilos CSS para la página Home */}
       <style jsx="true">{`
+        /* Los estilos CSS se mantienen iguales */
         /* Categorías destacadas */
         .category-img-container {
           position: relative;

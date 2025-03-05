@@ -1,0 +1,87 @@
+:root {
+    --body-bg: #f8f9fa;
+    --card-bg: #ffffff;
+    --text-color: #212529;
+    --border-color: rgba(0, 0, 0, 0.125);
+    --navbar-bg: #343a40;
+    --navbar-color: rgba(255, 255, 255, 0.9);
+    --shadow-color: rgba(0, 0, 0, 0.1);
+    --input-bg: #ffffff;
+    --hover-bg: rgba(13, 110, 253, 0.05);
+  }
+  
+  /* Variables para el modo oscuro */
+  [data-bs-theme="dark"] {
+    --body-bg: #121212;
+    --card-bg: #1e1e1e;
+    --text-color: #f8f9fa;
+    --border-color: rgba(255, 255, 255, 0.125);
+    --navbar-bg: #121212;
+    --navbar-color: rgba(255, 255, 255, 0.9);
+    --shadow-color: rgba(0, 0, 0, 0.3);
+    --input-bg: #2c2c2c;
+    --hover-bg: rgba(255, 255, 255, 0.05);
+  }
+  
+  /* Aplicación de variables */
+  body {
+    background-color: var(--body-bg);
+    color: var(--text-color);
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+  
+  .card,
+  .dropdown-menu,
+  .offcanvas,
+  .modal-content {
+    background-color: var(--card-bg);
+    border-color: var(--border-color);
+  }
+  
+  .form-control,
+  .form-select {
+    background-color: var(--input-bg);
+    border-color: var(--border-color);
+    color: var(--text-color);
+  }
+  
+  .text-muted {
+    color: #6c757d !important;
+  }
+  
+  [data-bs-theme="dark"] .text-muted {
+    color: #adb5bd !important;
+  }
+  
+  /* Ajustes específicos para el navbar */
+  .navbar-main {
+    background-color: var(--navbar-bg);
+  }
+  
+  .navbar-main .nav-link-custom {
+    color: var(--navbar-color) !important;
+  }
+  
+  .btn-outline-light {
+    border-color: rgba(255, 255, 255, 0.5);
+  }
+  
+  [data-bs-theme="dark"] .btn-light {
+    background-color: #2c2c2c;
+    border-color: #2c2c2c;
+    color: #f8f9fa;
+  }
+  
+  [data-bs-theme="dark"] .bg-light {
+    background-color: #2c2c2c !important;
+  }
+  
+  /* Transiciones suaves para cambios de tema */
+  * {
+    transition: background-color 0.3s ease, color 0.15s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  /* Transiciones específicas para texto */
+  p, h1, h2, h3, h4, h5, h6, span, a, button, .nav-link, label, .form-control {
+    transition: color 0.15s ease !important;
+  }
