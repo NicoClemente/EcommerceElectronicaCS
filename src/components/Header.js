@@ -5,7 +5,6 @@ import { Link } from 'react-router-dom';
 const Header = () => {
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
 
-  // Detectar si estamos en un dispositivo móvil
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth <= 768);
@@ -17,7 +16,6 @@ const Header = () => {
     };
   }, []);
 
-  // Definir gradientes para dispositivos móviles
   const mobileBackgrounds = {
     slide1: "linear-gradient(135deg, #5E35B1, #3949AB)",
     slide2: "linear-gradient(135deg, #1E88E5, #26C6DA)",
@@ -40,8 +38,8 @@ const Header = () => {
           <div
             className="carousel-image-container"
             style={{ 
-              backgroundImage: isMobile ? mobileBackgrounds.slide1 : "url('/images/lavarropas.png')",
-              backgroundColor: "#5E35B1" // Fondo base para el gradiente
+              backgroundImage: isMobile ? mobileBackgrounds.slide1 : "url('https://as1.ftcdn.net/v2/jpg/04/30/05/04/1000_F_430050411_jC9nDDc9pfgBPb0BT4YcYkIOotCqOXUc.jpg')",
+              backgroundColor: "#5E35B1" 
             }}
           >
             <div className="carousel-overlay">
@@ -65,8 +63,8 @@ const Header = () => {
           <div
             className="carousel-image-container"
             style={{ 
-              backgroundImage: isMobile ? mobileBackgrounds.slide2 : "url('/images/electrodomesticos.png')",
-              backgroundColor: "#1E88E5" // Fondo base para el gradiente
+              backgroundImage: isMobile ? mobileBackgrounds.slide2 : "url('https://images.unsplash.com/photo-1558002038-1055907df827?q=80&w=1470&auto=format&fit=crop')",
+              backgroundColor: "#1E88E5" 
             }}
           >
             <div className="carousel-overlay">
@@ -90,8 +88,8 @@ const Header = () => {
           <div
             className="carousel-image-container"
             style={{ 
-              backgroundImage: isMobile ? mobileBackgrounds.slide3 : "url('/images/laptop.png')",
-              backgroundColor: "#F57C00" // Fondo base para el gradiente
+              backgroundImage: isMobile ? mobileBackgrounds.slide3 : "url('https://images.unsplash.com/photo-1542744094-3a31f272c490?q=80&w=1470&auto=format&fit=crop')",
+              backgroundColor: "#F57C00" 
             }}
           >
             <div className="carousel-overlay">
@@ -115,8 +113,8 @@ const Header = () => {
           <div
             className="carousel-image-container"
             style={{ 
-              backgroundImage: isMobile ? mobileBackgrounds.slide4 : "url('/images/nespresso.png')",
-              backgroundColor: "#7B1FA2" // Fondo base para el gradiente
+              backgroundImage: isMobile ? mobileBackgrounds.slide4 : "url('https://as1.ftcdn.net/v2/jpg/01/06/73/78/1000_F_106737803_7RpjiRLymmSoqJlYzQBVQTqzDv9t4L1e.jpg')",
+              backgroundColor: "#7B1FA2" 
             }}
           >
             <div className="carousel-overlay">
@@ -137,8 +135,8 @@ const Header = () => {
           <div
             className="carousel-image-container"
             style={{ 
-              backgroundImage: isMobile ? mobileBackgrounds.slide5 : "url('/images/cuotas.png')",
-              backgroundColor: "#43A047" // Fondo base para el gradiente
+              backgroundImage: isMobile ? mobileBackgrounds.slide5 : "url('https://images.unsplash.com/photo-1563013544-824ae1b704d3?q=80&w=1470&auto=format&fit=crop')",
+              backgroundColor: "#43A047" 
             }}
           >
             <div className="carousel-overlay">
@@ -209,7 +207,7 @@ const Header = () => {
 
         .welcome-title {
           font-family: 'Montserrat', sans-serif;
-          font-weight: 700; /* Ya definido en tu carga de fuente */
+          font-weight: 700;
           color: #2c3e50;
           letter-spacing: -1.5px;
           background: linear-gradient(45deg, #5E35B1, #3949AB);
@@ -219,7 +217,7 @@ const Header = () => {
         }
         .carousel-image-container {
           position: relative;
-          height: 400px;
+          height: 500px;
           background-size: cover;
           background-position: center;
           background-repeat: no-repeat;
@@ -231,7 +229,7 @@ const Header = () => {
           left: 0;
           width: 100%;
           height: 100%;
-          background: rgba(0, 0, 0, 0.5);
+          background: rgba(0, 0, 0, 0.4);
           display: flex;
           align-items: center;
         }
@@ -285,7 +283,7 @@ const Header = () => {
           }
           
           .carousel-overlay {
-            background: rgba(0, 0, 0, 0.3); /* Reducir la superposición para que el gradiente sea más visible */
+            background: rgba(0, 0, 0, 0.3);
           }
           
           .carousel-caption-custom h2 {

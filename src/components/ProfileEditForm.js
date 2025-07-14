@@ -32,7 +32,6 @@ const ProfileEditForm = () => {
       
       if (response.success) {
         setSuccess('Perfil actualizado correctamente');
-        // Actualiza el contexto con los nuevos datos
         login({...user, ...response.usuario});
       }
     } catch (err) {

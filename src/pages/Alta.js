@@ -24,12 +24,11 @@ const Alta = () => {
   const [file, setFile] = useState(null);
   const [uploadingImage, setUploadingImage] = useState(false);
 
-  // Cambiado de useState a una constante para evitar el warning
   const categorias = [
     'Computadoras', 'Smartphones', 'Electrodomésticos', 'Audio', 'Televisores', 'Accesorios'
   ];
 
-  // Verificar si el usuario es administrador
+  // Verifica si el usuario es administrador
   useEffect(() => {
     const userIsAdmin = isAdmin();
     console.log("Es administrador:", userIsAdmin);
@@ -86,7 +85,6 @@ const Alta = () => {
       await obtenerDetallesItem(respuesta);
       setSuccess(true);
 
-      // Resetear el formulario después de un tiempo
       setTimeout(() => {
         setFormulario({
           titulo: '',

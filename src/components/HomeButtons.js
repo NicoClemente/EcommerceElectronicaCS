@@ -27,7 +27,6 @@ const HomeButtons = () => {
                 className="category-img"
               />
               <div className="card-overlay">
-                <i className="bi bi-bag category-icon"></i>
               </div>
             </div>
             <Card.Body className="text-center py-4">

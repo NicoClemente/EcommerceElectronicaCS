@@ -76,7 +76,7 @@ function Navigation() {
   // Calcular la cantidad total de items en el carrito
   const cantidadTotal = carrito.reduce((total, item) => total + item.cantidad, 0);
 
-  // Verificar si el usuario es administrador
+  // Verifica si el usuario es administrador
   const userIsAdmin = isAdmin();
 
   return (

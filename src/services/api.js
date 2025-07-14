@@ -180,12 +180,79 @@ export const obtenerDetallesItem = async (item) => {
 // Pago
 export const procesarPago = async (paymentData) => {
   try {
-    console.log('Enviando a API:', paymentData);
-    const response = await api.post('/pagos/procesar', paymentData);
+    console.log('🚀 Enviando datos de pago:', JSON.stringify(paymentData, null, 2));
+    console.log('🌐 URL base de la API:', baseURL);
+    console.log('🔗 URL completa:', `${baseURL}pagos/procesar`);
+    
+    // Validar datos antes de enviar
+    if (!paymentData || !paymentData.items || paymentData.items.length === 0) {
+      throw new Error('Datos de pago inválidos: no hay items');
+    }
+    
+    // Validar cada item
+    paymentData.items.forEach((item, index) => {
+      if (!item.title || typeof item.title !== 'string') {
+        throw new Error(`Item ${index + 1}: título inválido`);
+      }
+      if (!item.unit_price || typeof item.unit_price !== 'number' || item.unit_price <= 0) {
+        throw new Error(`Item ${index + 1}: precio inválido`);
+      }
+      if (!item.quantity || typeof item.quantity !== 'number' || item.quantity <= 0) {
+        throw new Error(`Item ${index + 1}: cantidad inválida`);
+      }
+    });
+    
+    const response = await api.post('/pagos/procesar', paymentData, {
+      timeout: 10000, // 10 segundos de timeout
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+    
+    console.log('✅ Respuesta exitosa de MercadoPago:', response.data);
+    
+    if (!response.data) {
+      throw new Error('Respuesta vacía del servidor');
+    }
+    
+    if (!response.data.init_point) {
+      console.error('❌ Respuesta sin init_point:', response.data);
+      throw new Error('El servidor no devolvió una URL de pago válida');
+    }
+    
     return response.data;
+    
   } catch (error) {
-    console.error('Error detallado:', error.response?.data || error);
-    throw new Error(error.response?.data?.error || 'Error al procesar el pago');
+    console.error('❌ Error detallado en procesarPago:', {
+      message: error.message,
+      response: error.response?.data,
+      status: error.response?.status,
+      statusText: error.response?.statusText,
+      config: {
+        url: error.config?.url,
+        method: error.config?.method,
+        data: error.config?.data
+      }
+    });
+    
+    // Manejar diferentes tipos de errores
+    if (error.code === 'ECONNABORTED') {
+      throw new Error('Tiempo de espera agotado. Por favor, intenta nuevamente.');
+    }
+    
+    if (error.response) {
+      // El servidor respondió con un código de error
+      const errorMessage = error.response.data?.error || 
+                          error.response.data?.message || 
+                          `Error del servidor: ${error.response.status}`;
+      throw new Error(errorMessage);
+    } else if (error.request) {
+      // La petición se hizo pero no hubo respuesta
+      throw new Error('No se pudo conectar con el servidor. Verifica tu conexión a internet.');
+    } else {
+      // Error en la configuración de la petición
+      throw new Error(error.message || 'Error al procesar el pago');
+    }
   }
 };
 

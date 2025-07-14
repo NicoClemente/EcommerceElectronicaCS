@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Card, Button, Modal, Badge } from "react-bootstrap";
+import { isAdmin } from "../utils/roleUtils";
 import EditModal from "./EditModal.js";
-import { isAdmin } from "../utils/roleUtils"; // Importamos la función de verificación
 
 const CardProducto = ({ producto, agregarAlCarrito, recargarProductos }) => {
   const [showDetalleModal, setShowDetalleModal] = useState(false);
@@ -9,7 +9,6 @@ const CardProducto = ({ producto, agregarAlCarrito, recargarProductos }) => {
   const [cantidad, setCantidad] = useState(1);
   const [userIsAdmin, setUserIsAdmin] = useState(false);
 
-  // Verificar si el usuario es administrador al cargar el componente
   useEffect(() => {
     const checkAdminStatus = () => {
       const adminStatus = isAdmin();
@@ -19,7 +18,6 @@ const CardProducto = ({ producto, agregarAlCarrito, recargarProductos }) => {
 
     checkAdminStatus();
 
-    // Escuchar cambios en el localStorage
     window.addEventListener('storage', checkAdminStatus);
     return () => {
       window.removeEventListener('storage', checkAdminStatus);
@@ -49,12 +47,12 @@ const CardProducto = ({ producto, agregarAlCarrito, recargarProductos }) => {
   const handleAgregarAlCarrito = () => {
     const productoConCantidad = { ...producto, cantidad };
     agregarAlCarrito(productoConCantidad);
-    setCantidad(1); // Resetear la cantidad después de agregar
+    setCantidad(1);
   };
 
   return (
     <Card className="h-100 shadow-sm hover-effect">
-      {producto.categoria && (
+      {/* {producto.categoria && (
         <Badge
           bg="primary"
           className="position-absolute m-2"
@@ -62,7 +60,7 @@ const CardProducto = ({ producto, agregarAlCarrito, recargarProductos }) => {
         >
           {producto.categoria}
         </Badge>
-      )}
+      )} */}
 
       <div className="image-container p-3 text-center">
         <Card.Img
@@ -108,7 +106,7 @@ const CardProducto = ({ producto, agregarAlCarrito, recargarProductos }) => {
       {/* Botón de edición - Visible sólo para administradores */}
       {userIsAdmin && (
         <Button
-          variant="" 
+          variant=""
           className="position-absolute d-flex align-items-center justify-content-center"
           style={{
             top: "10px",
@@ -121,7 +119,7 @@ const CardProducto = ({ producto, agregarAlCarrito, recargarProductos }) => {
           }}
           onClick={handleEditarProducto}
         >
-          ✏️  
+          ✏️
         </Button>
       )}
 

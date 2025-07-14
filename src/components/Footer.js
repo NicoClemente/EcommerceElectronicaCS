@@ -1,9 +1,7 @@
 import React from 'react';
 import { Container, Row, Col, Button, Form, InputGroup } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { 
-  faFacebook, faInstagram, faTwitter, faYoutube 
-} from '@fortawesome/free-brands-svg-icons';
+import { faFacebook, faInstagram, faTwitter, faYoutube, faCcVisa, faCcMastercard, faCcPaypal, faCcAmex } from '@fortawesome/free-brands-svg-icons';
 import { faEnvelope, faPhone, faMapMarkerAlt, faCreditCard } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
 
@@ -146,10 +144,11 @@ const Footer = () => {
           </Col>
           <Col md={4} className="text-md-end">
             <div className="payment-methods">
-              <FontAwesomeIcon icon={faCreditCard} className="me-2 text-light" />
-              <img src="/images/visa.png" alt="Visa" className="payment-icon" style={{ height: "24px", marginRight: "8px" }} />
-              <img src="/images/mastercard.png" alt="Mastercard" className="payment-icon" style={{ height: "24px", marginRight: "8px" }} />
-              <img src="/images/mercadopago.png" alt="MercadoPago" className="payment-icon" style={{ height: "24px" }} />
+              <span className="me-2">Métodos de pago:</span>
+              <FontAwesomeIcon icon={faCcVisa} className="payment-icon ms-2" size="lg" />
+              <FontAwesomeIcon icon={faCcMastercard} className="payment-icon ms-2" size="lg" />
+              <FontAwesomeIcon icon={faCcPaypal} className="payment-icon ms-2" size="lg" />
+              <FontAwesomeIcon icon={faCcAmex} className="payment-icon ms-2" size="lg" />
             </div>
           </Col>
         </Row>
@@ -175,6 +174,19 @@ const Footer = () => {
         .btn-floating:hover {
           transform: translateY(-3px);
           box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        .payment-icon {
+          font-size: 1.8rem;
+          color: #f8f9fa;
+          transition: all 0.3s ease;
+        }
+        .payment-icon:hover {
+          color: #0d6efd;
+        }
+        
+        /* Adaptación para modo oscuro */
+        [data-bs-theme="dark"] .payment-icon {
+          color: #f8f9fa;
         }
       `}</style>
     </footer>

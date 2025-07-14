@@ -32,7 +32,6 @@ const EditModal = ({ producto, showModal, onClose }) => {
 
     try {
       setUploadingImage(true);
-      // Esta función debe implementarse en tu archivo api.js
       const imageUrl = await subirImagen(file);
       setFormulario({ ...formulario, imagen: imageUrl });
       setUploadingImage(false);
@@ -138,7 +137,7 @@ const EditModal = ({ producto, showModal, onClose }) => {
             </Col>    
           </Row>
           
-          {/* Prdocto destacado */}
+          {/* Producto destacado */}
           <Form.Group controlId="destacado" className="mb-3">
             <Form.Check
               type="checkbox"
