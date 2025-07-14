@@ -113,7 +113,7 @@ const Header = () => {
           <div
             className="carousel-image-container"
             style={{ 
-              backgroundImage: isMobile ? mobileBackgrounds.slide4 : "url('https://as1.ftcdn.net/v2/jpg/01/06/73/78/1000_F_106737803_7RpjiRLymmSoqJlYzQBVQTqzDv9t4L1e.jpg')",
+              backgroundImage: isMobile ? mobileBackgrounds.slide4 : "url('https://dyncsolutions.com/wp-content/uploads/2023/04/La-influencia-de-la-tecnologia-1024x535.png')",
               backgroundColor: "#7B1FA2" 
             }}
           >
