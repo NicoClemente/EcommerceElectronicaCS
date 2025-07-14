@@ -38,7 +38,7 @@ const Header = () => {
           <div
             className="carousel-image-container"
             style={{ 
-              backgroundImage: isMobile ? mobileBackgrounds.slide1 : "url('https://as1.ftcdn.net/v2/jpg/04/30/05/04/1000_F_430050411_jC9nDDc9pfgBPb0BT4YcYkIOotCqOXUc.jpg')",
+              backgroundImage: isMobile ? mobileBackgrounds.slide1 : "url('https://fedecocina.net/imagenes/16x9/compra-inteligente-guia-para-seleccionar-electrodomesticos-de-cocina.jpg')",
               backgroundColor: "#5E35B1" 
             }}
           >
@@ -120,7 +120,7 @@ const Header = () => {
             <div className="carousel-overlay">
               <Container>
                 <div className="carousel-caption-custom">
-                  <h2 className="display-4 fw-bold text-light mb-3">Experiencias Gourmet</h2>
+                  <h2 className="display-4 fw-bold text-light mb-3">Tecnología de última generación</h2>
                   <p className="lead mb-4">La mejor tecnología para disfrutar de momentos únicos.</p>
                   <Button as={Link} to="/shop" variant="primary" size="lg">
                     Descubrir
