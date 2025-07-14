@@ -180,36 +180,66 @@ export const obtenerDetallesItem = async (item) => {
 // Pago
 export const procesarPago = async (paymentData) => {
   try {
-    console.log('🚀 Enviando datos de pago:', JSON.stringify(paymentData, null, 2));
-    console.log('🌐 URL base de la API:', baseURL);
-    console.log('🔗 URL completa:', `${baseURL}pagos/procesar`);
+    console.log('🚀 procesarPago - Iniciando');
+    console.log('🌐 Base URL:', baseURL);
+    console.log('📦 Payment data:', JSON.stringify(paymentData, null, 2));
     
-    // Validar datos antes de enviar
-    if (!paymentData || !paymentData.items || paymentData.items.length === 0) {
-      throw new Error('Datos de pago inválidos: no hay items');
+    // Validaciones exhaustivas
+    if (!paymentData) {
+      throw new Error('No se proporcionaron datos de pago');
     }
     
-    // Validar cada item
+    if (!paymentData.items || !Array.isArray(paymentData.items)) {
+      throw new Error('Los items deben ser un array');
+    }
+    
+    if (paymentData.items.length === 0) {
+      throw new Error('No hay items para procesar');
+    }
+    
+    // Validar cada item individualmente
     paymentData.items.forEach((item, index) => {
       if (!item.title || typeof item.title !== 'string') {
         throw new Error(`Item ${index + 1}: título inválido`);
       }
       if (!item.unit_price || typeof item.unit_price !== 'number' || item.unit_price <= 0) {
-        throw new Error(`Item ${index + 1}: precio inválido`);
+        throw new Error(`Item ${index + 1}: precio inválido (${item.unit_price})`);
       }
       if (!item.quantity || typeof item.quantity !== 'number' || item.quantity <= 0) {
-        throw new Error(`Item ${index + 1}: cantidad inválida`);
+        throw new Error(`Item ${index + 1}: cantidad inválida (${item.quantity})`);
+      }
+      if (item.currency_id !== 'ARS') {
+        throw new Error(`Item ${index + 1}: moneda debe ser ARS`);
       }
     });
     
-    const response = await api.post('/pagos/procesar', paymentData, {
-      timeout: 10000, // 10 segundos de timeout
+    console.log('✅ Validaciones pasadas, enviando petición...');
+    
+    // Configuración específica para la petición
+    const config = {
+      timeout: 15000, // 15 segundos
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
       }
-    });
+    };
     
-    console.log('✅ Respuesta exitosa de MercadoPago:', response.data);
+    // Agregar token si existe
+    const token = localStorage.getItem('token');
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+      console.log('🔑 Token agregado a la petición');
+    }
+    
+    console.log('📡 Enviando POST a:', `${baseURL}pagos/procesar`);
+    console.log('⚙️ Config:', config);
+    
+    const response = await api.post('/pagos/procesar', paymentData, config);
+    
+    console.log('✅ Respuesta recibida:');
+    console.log('- Status:', response.status);
+    console.log('- Headers:', response.headers);
+    console.log('- Data:', response.data);
     
     if (!response.data) {
       throw new Error('Respuesta vacía del servidor');
@@ -220,38 +250,40 @@ export const procesarPago = async (paymentData) => {
       throw new Error('El servidor no devolvió una URL de pago válida');
     }
     
+    console.log('🎉 Pago procesado exitosamente');
     return response.data;
     
   } catch (error) {
-    console.error('❌ Error detallado en procesarPago:', {
-      message: error.message,
-      response: error.response?.data,
-      status: error.response?.status,
-      statusText: error.response?.statusText,
-      config: {
-        url: error.config?.url,
-        method: error.config?.method,
-        data: error.config?.data
-      }
-    });
+    console.error('❌ Error en procesarPago:');
     
-    // Manejar diferentes tipos de errores
     if (error.code === 'ECONNABORTED') {
-      throw new Error('Tiempo de espera agotado. Por favor, intenta nuevamente.');
+      console.error('⏱️ Timeout de conexión');
+      throw new Error('Tiempo de espera agotado. El servidor tardó demasiado en responder.');
     }
     
     if (error.response) {
-      // El servidor respondió con un código de error
-      const errorMessage = error.response.data?.error || 
-                          error.response.data?.message || 
-                          `Error del servidor: ${error.response.status}`;
-      throw new Error(errorMessage);
+      // El servidor respondió con un error
+      console.error('📡 Respuesta de error del servidor:');
+      console.error('- Status:', error.response.status);
+      console.error('- Data:', error.response.data);
+      console.error('- Headers:', error.response.headers);
+      
+      const serverError = error.response.data?.error || 
+                         error.response.data?.message || 
+                         `Error del servidor (${error.response.status})`;
+      
+      throw new Error(serverError);
+      
     } else if (error.request) {
-      // La petición se hizo pero no hubo respuesta
+      // La petición se envió pero no hubo respuesta
+      console.error('📡 No se recibió respuesta del servidor:');
+      console.error('- Request:', error.request);
       throw new Error('No se pudo conectar con el servidor. Verifica tu conexión a internet.');
+      
     } else {
       // Error en la configuración de la petición
-      throw new Error(error.message || 'Error al procesar el pago');
+      console.error('⚙️ Error de configuración:', error.message);
+      throw new Error(error.message || 'Error al configurar la petición de pago');
     }
   }
 };
