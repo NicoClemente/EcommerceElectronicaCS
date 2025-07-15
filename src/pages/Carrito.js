@@ -17,7 +17,6 @@ const CarritoCompra = ({ carrito, eliminarDelCarrito }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  // Calcular precio total y cantidad total
   const precioTotal = itemsCarrito.reduce(
     (total, item) => total + item.precio * item.cantidad,
     0
@@ -29,7 +28,7 @@ const CarritoCompra = ({ carrito, eliminarDelCarrito }) => {
   );
 
   const handleActualizarCantidad = (itemId, cantidad) => {
-    if (cantidad < 1) return; // No permitir cantidades menores a 1
+    if (cantidad < 1) return;
     
     const nuevosItems = itemsCarrito.map((item) =>
       item._id === itemId ? { ...item, cantidad } : item
@@ -51,9 +50,8 @@ const CarritoCompra = ({ carrito, eliminarDelCarrito }) => {
   };
 
   const handleRealizarPedido = async () => {
-    // Validar que la dirección esté completa
-    if (!direccionEntrega.calle || !direccionEntrega.ciudad || !direccionEntrega.codigoPostal) {
-      setError("Por favor complete los campos obligatorios de la dirección de entrega");
+    if (!direccionEntrega.calle || !direccionEntrega.ciudad || !direccionEntrega.codigoPostal || !direccionEntrega.telefono) {
+      setError("Por favor complete todos los campos obligatorios de la dirección de entrega");
       return;
     }
 
@@ -91,7 +89,7 @@ const CarritoCompra = ({ carrito, eliminarDelCarrito }) => {
       instrucciones: "",
     });
     setMostrarSeccionPago(false);
-    eliminarDelCarrito("all"); // Limpiar todo el carrito
+    eliminarDelCarrito("all");
   };
 
   if (itemsCarrito.length === 0) {
@@ -130,7 +128,6 @@ const CarritoCompra = ({ carrito, eliminarDelCarrito }) => {
       )}
       
       <Row>
-        {/* Listado de productos en el carrito */}
         <Col lg={8}>
           <Card className="mb-4 shadow-sm">
             <Card.Header className="bg-white">
@@ -216,7 +213,6 @@ const CarritoCompra = ({ carrito, eliminarDelCarrito }) => {
           </Card>
         </Col>
 
-        {/* Formulario de dirección de entrega y pago */}
         <Col lg={4}>
           <Card className="shadow-sm mb-4">
             <Card.Header className="bg-white">
@@ -264,18 +260,19 @@ const CarritoCompra = ({ carrito, eliminarDelCarrito }) => {
                 </Row>
 
                 <Form.Group className="mb-3">
-                  <Form.Label>Teléfono de contacto<span className="text-danger">*</span></Form.Label>
+                  <Form.Label>Teléfono de contacto <span className="text-danger">*</span></Form.Label>
                   <Form.Control
                     type="tel"
                     name="telefono"
                     value={direccionEntrega.telefono}
                     onChange={handleActualizarDireccion}
                     placeholder="Para coordinar la entrega"
+                    required
                   />
                 </Form.Group>
 
                 <Form.Group className="mb-3">
-                  <Form.Label>Instrucciones adicionales</Form.Label>
+                  <Form.Label>Instrucciones adicionales (opcional)</Form.Label>
                   <Form.Control
                     as="textarea"
                     rows={2}
