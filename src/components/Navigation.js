@@ -12,6 +12,9 @@ import ListaPedidos from "../pages/ListaPedidos";
 import Login from '../pages/Login';
 import Registro from '../pages/Registro';
 import ResultadoPago from "../pages/ResultadoPago";
+import PagoExitoso from '../pages/PagoExitoso';
+import PagoFallido from '../pages/PagoFallido';
+import PagoPendiente from '../pages/PagoPendiente';
 import { isAdmin } from "../utils/roleUtils";
 import Perfil from "../pages/Perfil";
 import ThemeToggle from "./ThemeToggle";
@@ -124,7 +127,7 @@ function Navigation() {
             <div className="me-3 d-none d-lg-block">
               <ThemeToggle />
             </div>
-            
+
             {/* Dropdown para usuario autenticado */}
             {user ? (
               <Dropdown align="end" className="me-3 d-none d-lg-block">
@@ -311,7 +314,7 @@ function Navigation() {
                 </>
               )}
             </div>
-            
+
             {/* Botón de cambio de tema en el menú móvil */}
             <div className="mobile-nav-section mt-4">
               <h6 className="text-uppercase text-muted fw-bold small mb-3">Preferencias</h6>
@@ -353,6 +356,9 @@ function Navigation() {
         />
         <Route path="/pedidos" element={<ListaPedidos />} />
         <Route path="/pago/:status" element={<ResultadoPago />} />
+        <Route path="/pago/exitoso" element={<PagoExitoso />} />
+        <Route path="/pago/fallido" element={<PagoFallido />} />
+        <Route path="/pago/pendiente" element={<PagoPendiente />} />
       </Routes>
 
       {/* Estilos CSS para la navegación */}
