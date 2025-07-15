@@ -49,18 +49,16 @@ const PagoMercadoPago = ({ total, carrito }) => {
   
       console.log('📨 Datos finales a enviar:', JSON.stringify(paymentData, null, 2));
       
-      setDebugInfo(`Enviando ${paymentData.items.length} items al backend...`);
+      setDebugInfo('Procesando la compra...');
   
       const response = await procesarPago(paymentData);
       
       console.log('✅ Respuesta recibida del backend:', response);
-      setDebugInfo(`Respuesta recibida: ${JSON.stringify(response, null, 2)}`);
+      setDebugInfo('Redirigiendo a MercadoPago...');
       
       if (response && response.init_point) {
         console.log('🔗 Redirigiendo a:', response.init_point);
-        setDebugInfo(`Redirigiendo a MercadoPago...`);
         
-        // Pequeña pausa para que el usuario vea el mensaje
         setTimeout(() => {
           window.location.href = response.init_point;
         }, 1000);
@@ -72,9 +70,8 @@ const PagoMercadoPago = ({ total, carrito }) => {
     } catch (error) {
       console.error('❌ Error completo:', error);
       setError(error.message || 'Error al procesar el pago');
-      setDebugInfo(`Error: ${error.message}`);
+      setDebugInfo(null);
     } finally {
-      // No quitar loading inmediatamente si va a redireccionar
       if (!error) {
         setTimeout(() => setLoading(false), 2000);
       } else {
@@ -147,16 +144,10 @@ const PagoMercadoPago = ({ total, carrito }) => {
       
       <div className="text-center mt-3">
         <small className="text-muted">
-          🔒 Pago seguro con MercadoPago (Modo Sandbox - Dinero ficticio)
+          🔒 Pago seguro con MercadoPago
         </small>
       </div>
       
-      {/* Información de prueba para desarrollo */}
-      <div className="mt-3 p-2 bg-warning bg-opacity-10 rounded">
-        <small>
-          <strong>Modo de prueba:</strong> Usa las tarjetas de prueba de MercadoPago para simular pagos.
-        </small>
-      </div>
     </div>
   );
 };
